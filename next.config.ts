@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "indiancreativerugs.com",
       },
+      {
+        protocol: "https",
+        hostname: "silver-crocodile-439807.hostingersite.com",
+      },
     ],
   },
 };

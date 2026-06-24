@@ -8,7 +8,8 @@ export default async function CollectionPage({
 }: {
   params: Promise<{ collection: string }>;
 }) {
-  const allProducts = await getProducts();
+const { collection } = await params;  
+const allProducts = await getProducts();
 
 const collectionProducts = allProducts.filter(
   (product: any) =>
@@ -34,7 +35,7 @@ const collectionProducts = allProducts.filter(
 
         <div className="grid md:grid-cols-3 gap-10">
 
-          {collectionProducts.map((product) => (
+          {collectionProducts.map((product: any) => (
             <Link
               key={product.slug}
               href={`/rugs/${product.slug}`}
