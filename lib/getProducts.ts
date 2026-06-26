@@ -1,18 +1,19 @@
+import WooCommerce from "@/lib/woocommerce";
+
 export async function getProducts() {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "http://localhost:3000";
+  const response = await WooCommerce.get("products", {
+    per_page: 100,
+  });
 
-  const res = await fetch(
-    `${baseUrl}/api/products`,
-    {
-      cache: "no-store",
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch products");
-  }
-
-  return await res.json();
+  return response.data.map((product: any) => ({
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    price: product.price,
+    image:
+      product.images?.[0]?.src ||
+      "/images/persian/rugs1.jpg",
+    collection:
+      product.categories?.[0]?.name || "Luxury Rugs",
+  }));
 }
