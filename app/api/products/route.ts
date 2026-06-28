@@ -1,8 +1,35 @@
+import WooCommerce from "@/lib/woocommerce";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  return NextResponse.json({
-    success: true,
-    message: "API working",
-  });
+  try {
+    const response = await WooCommerce.get("products", {
+      per_page: 100,
+    });
+
+    const products = response.data.map((product: any) => ({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      image:
+        product.images?.[0]?.src ||
+        "/images/persian/rugs1.jpg",
+      category:
+        product.categories?.[0]?.name || "Luxury Rugs",
+    }));
+
+    return NextResponse.json(products);
+
+  } catch (error: any) {
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: error.message,
+      },
+      { status: 500 }
+    );
+  }
 }
