@@ -18,40 +18,49 @@ export default function Header() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10">
 
-        <div className="flex items-center justify-between gap-3 min-h-20 py-3 md:h-28 md:py-0">
+        <div className="flex items-center h-24">
 
           {/* Logo */}
 
-          <Link
-            href="/"
-            className="font-instrument text-[21px] leading-none sm:text-[26px] md:text-[34px] text-[#5D5A3D] max-w-[190px] sm:max-w-none"
-          >
-            Indian Creative Rugs
-          </Link>
+         <Link
+  href="/"
+  className="font-instrument text-[21px] leading-none sm:text-[26px] md:text-[36px] text-[#5D5A3D] shrink-0"
+>
+  Indian Creative Rugs
+</Link>
 
           {/* Desktop Navigation */}
-
-          <nav
+<nav
   aria-label="Primary navigation"
-  className="hidden lg:flex items-center gap-8 xl:gap-12 text-[14px] xl:text-[15px] uppercase tracking-[3px] xl:tracking-[4px] text-[#5D5A3D]"
+  className="hidden lg:flex items-center ml-auto gap-10 xl:gap-12 text-[14px] xl:text-[15px] uppercase tracking-[3px] xl:tracking-[4px] text-[#5D5A3D]"
 >
-  <Link href="/about">Our Story</Link>
+  <Link href="/about" className="whitespace-nowrap hover:text-black transition-colors">
+    Our Story
+  </Link>
 
-  <Link href="/rugs">Shop</Link>
+  <Link href="/rugs" className="whitespace-nowrap hover:text-black transition-colors">
+    Shop
+  </Link>
 
-  <Link href="/collections">Collections</Link>
+  <Link href="/collections" className="whitespace-nowrap hover:text-black transition-colors">
+    Collections
+  </Link>
 
-  <Link href="/ready-to-ship">Ready To Ship</Link>
+  <Link href="/ready-to-ship" className="whitespace-nowrap hover:text-black transition-colors">
+    Ready To Ship
+  </Link>
 
-  <Link href="/account">My Account</Link>
+  <Link href="/account" className="whitespace-nowrap hover:text-black transition-colors">
+    My Account
+  </Link>
 
-  <Link href="/cart">
+  <Link href="/cart" className="whitespace-nowrap hover:text-black transition-colors">
     Cart ({cartCount})
   </Link>
 </nav>
           {/* Mobile Menu Button */}
 
-          <div className="lg:hidden flex items-center gap-2 sm:gap-4">
+          <div className="lg:hidden ml-auto flex items-center gap-3">
 
             <Link
               href="/cart"
