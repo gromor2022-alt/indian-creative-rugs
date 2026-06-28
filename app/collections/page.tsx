@@ -5,31 +5,31 @@ const collections = [
   {
     name: "Persian",
     slug: "persian",
-    image: "/collections/persian.jpg",
+    image: "/images/collections/persian.jpg",
     description: "Timeless Persian masterpieces with intricate detailing.",
   },
   {
     name: "Heritage",
     slug: "heritage",
-    image: "/collections/heritage.jpg",
+    image: "/images/collections/heritage.jpg",
     description: "Traditional craftsmanship inspired by generations.",
   },
   {
     name: "Vintage",
     slug: "vintage",
-    image: "/collections/vintage.jpg",
+    image: "/images/collections/vintage.jpg",
     description: "Classic rugs with an elegant aged appearance.",
   },
   {
     name: "Modern",
     slug: "modern",
-    image: "/collections/modern.jpg",
+    image: "/images/collections/modern.jpg",
     description: "Contemporary designs for sophisticated interiors.",
   },
   {
     name: "Hand Knotted",
     slug: "hand-knotted",
-    image: "/collections/hand-knotted.jpg",
+    image: "/images/collections/hand-knotted.jpg",
     description: "Handcrafted luxury rugs woven by skilled artisans.",
   },
 ];
