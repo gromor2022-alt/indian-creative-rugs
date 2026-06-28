@@ -24,7 +24,7 @@ export default function Header() {
 
          <Link
   href="/"
-  className="font-instrument text-[21px] leading-none sm:text-[26px] md:text-[36px] text-[#5D5A3D] shrink-0"
+  className="font-instrument text-[19px] leading-none sm:text-[24px] md:text-[34px] text-[#5D5A3D] shrink-0"
 >
   Indian Creative Rugs
 </Link>
