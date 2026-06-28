@@ -13,7 +13,7 @@ const allProducts = await getProducts();
 
 const collectionProducts = allProducts.filter(
   (product: any) =>
-    product.category?.toLowerCase().replace(/\s+/g, "-") === collection
+    product.collection?.toLowerCase().replace(/\s+/g, "-") === collection
 );
 
   if (collectionProducts.length === 0) {
