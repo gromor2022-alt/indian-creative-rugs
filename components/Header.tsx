@@ -32,28 +32,25 @@ export default function Header() {
           {/* Desktop Navigation */}
 
           <nav
-            aria-label="Primary navigation"
-            className="hidden lg:flex items-center gap-8 xl:gap-12 text-[14px] xl:text-[15px] uppercase tracking-[3px] xl:tracking-[4px] text-[#5D5A3D]"
-          >
+  aria-label="Primary navigation"
+  className="hidden lg:flex items-center gap-8 xl:gap-12 text-[14px] xl:text-[15px] uppercase tracking-[3px] xl:tracking-[4px] text-[#5D5A3D]"
+>
+  <Link href="/rugs">Shop</Link>
 
-            <Link href="/rugs">Shop</Link>
+  <Link href="/collections">Collections</Link>
 
-            <Link href="/collections">Collections</Link>
+  <Link href="/ready-to-ship">Ready To Ship</Link>
 
-            <Link href="/about">About</Link>
+  <Link href="/about">About</Link>
 
-            <Link href="/contact">Contact</Link>
+  <Link href="/contact">Contact</Link>
 
-            <Link href="/ready-to-ship">
-              Ready To Ship
-            </Link>
+  <Link href="/account">My Account</Link>
 
-            <Link href="/cart">
-              Cart ({cartCount})
-            </Link>
-
-          </nav>
-
+  <Link href="/cart">
+    Cart ({cartCount})
+  </Link>
+</nav>
           {/* Mobile Menu Button */}
 
           <div className="lg:hidden flex items-center gap-2 sm:gap-4">
@@ -94,59 +91,65 @@ export default function Header() {
         >
 
           <nav
-            aria-label="Mobile navigation"
-            className="flex flex-col p-4 sm:p-6 text-[#5D5A3D] uppercase tracking-[3px] text-sm"
-          >
+  aria-label="Mobile navigation"
+  className="flex flex-col p-4 sm:p-6 text-[#5D5A3D] uppercase tracking-[3px] text-sm"
+>
+  <Link
+    href="/rugs"
+    onClick={() => setMobileMenuOpen(false)}
+    className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
+  >
+    Shop
+  </Link>
 
-            <Link
-              href="/rugs"
-              onClick={() => setMobileMenuOpen(false)}
-              className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
-            >
-              Shop
-            </Link>
+  <Link
+    href="/collections"
+    onClick={() => setMobileMenuOpen(false)}
+    className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
+  >
+    Collections
+  </Link>
 
-            <Link
-              href="/collections"
-              onClick={() => setMobileMenuOpen(false)}
-              className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
-            >
-              Collections
-            </Link>
+  <Link
+    href="/ready-to-ship"
+    onClick={() => setMobileMenuOpen(false)}
+    className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
+  >
+    Ready To Ship
+  </Link>
 
-            <Link
-              href="/about"
-              onClick={() => setMobileMenuOpen(false)}
-              className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
-            >
-              About
-            </Link>
+  <Link
+    href="/about"
+    onClick={() => setMobileMenuOpen(false)}
+    className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
+  >
+    About
+  </Link>
 
-            <Link
-              href="/contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
-            >
-              Contact
-            </Link>
+  <Link
+    href="/contact"
+    onClick={() => setMobileMenuOpen(false)}
+    className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
+  >
+    Contact
+  </Link>
 
-            <Link
-              href="/ready-to-ship"
-              onClick={() => setMobileMenuOpen(false)}
-              className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
-            >
-              Ready To Ship
-            </Link>
+  <Link
+    href="/account"
+    onClick={() => setMobileMenuOpen(false)}
+    className="min-h-12 flex items-center border-b border-[#D9D1C7]/60"
+  >
+    My Account
+  </Link>
 
-            <Link
-              href="/cart"
-              onClick={() => setMobileMenuOpen(false)}
-              className="min-h-12 flex items-center"
-            >
-              Cart ({cartCount})
-            </Link>
-
-          </nav>
+  <Link
+    href="/cart"
+    onClick={() => setMobileMenuOpen(false)}
+    className="min-h-12 flex items-center"
+  >
+    Cart ({cartCount})
+  </Link>
+</nav>
 
         </div>
       )}
