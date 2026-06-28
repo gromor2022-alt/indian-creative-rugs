@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 async function getProduct(slug: string) {
   const res = await fetch(
-    `http://localhost:3000/api/products/${slug}`,
+    `${process.env.NEXT_PUBLIC_SITE_URL}/api/products/${slug}`,
     {
       cache: "no-store",
     }
