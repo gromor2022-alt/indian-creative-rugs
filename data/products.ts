@@ -1,6 +1,6 @@
 export const products = [
   {
-    slug: "vibrant-garden-floral",
+    slug: "vibrant-garden-floral-rug",
     name: "Vibrant Garden Floral",
     price: 2499,
     image: "/images/rugs/ICR-001.jpeg",
@@ -14,7 +14,7 @@ export const products = [
   },
 
   {
-    slug: "pastel-tribal-garden",
+    slug: "pastel-tribal-garden-rug",
     name: "Pastel Tribal Garden",
     price: 2499,
     image: "/images/rugs/ICR-002.jpeg",
@@ -28,7 +28,7 @@ export const products = [
   },
 
   {
-    slug: "botanical-medallion",
+    slug: "botanical-medallion-rug",
     name: "Botanical Medallion",
     price: 2499,
     image: "/images/rugs/ICR-003.jpeg",
@@ -42,7 +42,7 @@ export const products = [
   },
 
   {
-    slug: "desert-pastel-abstract",
+    slug: "desert-pastel-abstract-rug",
     name: "Desert Pastel Abstract",
     price: 2499,
     image: "/images/rugs/ICR-004.jpeg",
@@ -56,7 +56,7 @@ export const products = [
   },
 
   {
-    slug: "minimal-oak-border",
+    slug: "minimal-oak-border-rug",
     name: "Minimal Oak Border",
     price: 2499,
     image: "/images/rugs/ICR-005.jpeg",
@@ -70,7 +70,7 @@ export const products = [
   },
 
   {
-    slug: "blue-blossom-square",
+    slug: "blue-blossom-square-rug",
     name: "Blue Blossom Square",
     price: 2499,
     image: "/images/rugs/ICR-006.jpeg",
@@ -84,7 +84,7 @@ export const products = [
   },
 
   {
-    slug: "spring-garden-floral",
+    slug: "spring-garden-floral-rug",
     name: "Spring Garden Floral",
     price: 2499,
     image: "/images/rugs/ICR-007.jpeg",
@@ -98,7 +98,7 @@ export const products = [
   },
 
   {
-    slug: "heritage-floral-sky",
+    slug: "heritage-floral-sky-rug",
     name: "Heritage Floral Sky",
     price: 2499,
     image: "/images/rugs/ICR-008.jpeg",
@@ -112,7 +112,7 @@ export const products = [
   },
 
   {
-    slug: "sage-lattice",
+    slug: "sage-lattice-rug",
     name: "Sage Lattice",
     price: 2499,
     image: "/images/rugs/ICR-009.jpeg",
@@ -126,7 +126,7 @@ export const products = [
   },
 
   {
-    slug: "soft-pastel-bloom",
+    slug: "soft-pastel-bloom-rug",
     name: "Soft Pastel Bloom",
     price: 2499,
     image: "/images/rugs/ICR-010.jpeg",
@@ -140,7 +140,7 @@ export const products = [
   },
 
   {
-    slug: "classic-oushak-beige",
+    slug: "classic-oushak-beige-rug",
     name: "Classic Oushak Beige",
     price: 2499,
     image: "/images/rugs/ICR-011.jpeg",
@@ -154,7 +154,7 @@ export const products = [
   },
 
   {
-    slug: "geometric-runner",
+    slug: "geometric-runner-rug",
     name: "Geometric Runner",
     price: 2499,
     image: "/images/rugs/ICR-012.jpeg",
@@ -168,7 +168,7 @@ export const products = [
   },
 
   {
-    slug: "nordic-botanical",
+    slug: "nordic-botanical-rug",
     name: "Nordic Botanical",
     price: 2499,
     image: "/images/rugs/ICR-013.jpeg",
@@ -182,7 +182,7 @@ export const products = [
   },
 
   {
-    slug: "grey-heritage-garden",
+    slug: "grey-heritage-garden-rug",
     name: "Grey Heritage Garden",
     price: 2499,
     image: "/images/rugs/ICR-014.jpeg",
