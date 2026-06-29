@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { User, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 
@@ -50,13 +51,27 @@ export default function Header() {
     Ready To Ship
   </Link>
 
-  <Link href="/account" className="whitespace-nowrap hover:text-black transition-colors">
-    My Account
-  </Link>
+  <Link
+  href="/account"
+  className="hover:text-black transition-colors"
+  aria-label="My Account"
+>
+  <User size={22} />
+</Link>
 
-  <Link href="/cart" className="whitespace-nowrap hover:text-black transition-colors">
-    Cart ({cartCount})
-  </Link>
+<Link
+  href="/cart"
+  className="relative hover:text-black transition-colors"
+  aria-label="Shopping Cart"
+>
+  <ShoppingBag size={22} />
+
+  {cartCount > 0 && (
+    <span className="absolute -top-2 -right-2 bg-[#B89B5E] text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
+      {cartCount}
+    </span>
+  )}
+</Link>
 </nav>
           {/* Mobile Menu Button */}
 
