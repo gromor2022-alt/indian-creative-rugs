@@ -12,34 +12,25 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // Find the WooCommerce customer
-    const customerResponse = await WooCommerce.get("customers", {
+    const response = await WooCommerce.get("customers", {
       email,
     });
 
-    const customer = customerResponse.data[0];
+    const customer = response.data[0];
 
     if (!customer) {
       return NextResponse.json({
-        success: true,
-        orders: [],
+        success: false,
+        message: "Customer not found.",
       });
     }
 
-    // Get orders for this customer
-    const ordersResponse = await WooCommerce.get("orders", {
-      customer: customer.id,
-      per_page: 100,
-    });
-
     return NextResponse.json({
       success: true,
-      orders: ordersResponse.data,
+      customer,
     });
 
   } catch (error: any) {
-    console.error(error);
-
     return NextResponse.json({
       success: false,
       message: error.message,

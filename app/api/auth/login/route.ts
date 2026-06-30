@@ -31,11 +31,15 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
-      success: true,
-      token: data.token,
-      user_email: data.user_email,
-      user_display_name: data.user_display_name,
-    });
+  success: true,
+  token: data.token,
+
+  email: data.user_email,
+
+  name: data.user_display_name,
+
+  username: data.user_nicename,
+});
 
   } catch (error) {
     return NextResponse.json(

@@ -8,14 +8,35 @@ export default function AccountPage() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
+  const loadCustomer = async () => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
 
-    if (token && storedUser) {
-      setLoggedIn(true);
-      setUser(JSON.parse(storedUser));
+    if (!token || !storedUser) return;
+
+    const localUser = JSON.parse(storedUser);
+
+    setLoggedIn(true);
+
+    try {
+      const res = await fetch(
+        `/api/account/me?email=${localUser.email}`
+      );
+
+      const data = await res.json();
+
+      if (data.success) {
+        setUser(data.customer);
+      } else {
+        setUser(localUser);
+      }
+    } catch {
+      setUser(localUser);
     }
-  }, []);
+  };
+
+  loadCustomer();
+}, []);
 
   if (!loggedIn) {
     return (
@@ -78,13 +99,12 @@ export default function AccountPage() {
       <div className="max-w-5xl mx-auto px-8 py-20">
 
         <h1 className="font-instrument text-6xl text-[#22304A] mb-4">
-          Welcome Back 👋
-        </h1>
+  Welcome Back {user?.first_name || user?.name || "Customer"} 👋
+</h1>
 
-        <p className="text-lg text-gray-600 mb-10">
-          You are successfully logged in.
-        </p>
-
+<p className="text-lg text-gray-600 mb-10">
+  Welcome to your Indian Creative Rugs Family.
+</p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
 
  <Link

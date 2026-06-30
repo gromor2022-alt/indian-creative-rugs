@@ -4,7 +4,13 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    
+    const customerResponse = await WooCommerce.get("customers", {
+  email: body.email,
+});
 
+
+console.log("CUSTOMER:", customerResponse.data);
     const order = {
       payment_method: "ppcp-gateway",
       payment_method_title: "PayPal",
