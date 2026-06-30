@@ -8,10 +8,11 @@ export async function POST(request: Request) {
     const customerResponse = await WooCommerce.get("customers", {
   email: body.email,
 });
+const customer = customerResponse.data[0];
 
 
-console.log("CUSTOMER:", customerResponse.data);
     const order = {
+     customer_id: customer ? Number(customer.id) : 0,  
       payment_method: "ppcp-gateway",
       payment_method_title: "PayPal",
       set_paid: false,
