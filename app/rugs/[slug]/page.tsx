@@ -38,17 +38,11 @@ if (product.code) {
 }
 
   return (
-    <main className="bg-[#F4F0E8] min-h-screen">
+    <main className="bg-[#FFFFFF] min-h-screen">
 
       <div className="max-w-[1500px] mx-auto px-8 py-14">
 
-        {/* Breadcrumb */}
-
-        <div className="text-sm text-gray-500 mb-10">
-          Home / Rugs / {product.name}
-        </div>
-
-        {/* Product */}
+              {/* Product */}
 
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
 
