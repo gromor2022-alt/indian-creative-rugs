@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function LeadTime() {
   return (
-    <section className="bg-[#F8F5EF] py-20 md:py-28">
+    <section className="bg-[#F7EADF] py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
 
         <div className="text-center mb-16">

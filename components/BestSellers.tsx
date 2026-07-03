@@ -26,7 +26,7 @@ export default function BestSellers({ products }: Props) {
   return (
     <section
       id="best-sellers"
-      className="bg-[#F4F0E8] py-16 md:py-24 overflow-hidden"
+      className="bg-[#F7EADF] py-16 md:py-24 overflow-hidden"
     >
       <div className="max-w-[1900px] mx-auto px-4 sm:px-6">
         <h2 className="font-instrument text-[40px] md:text-[54px] text-center text-[#22304A] mb-4">
@@ -84,9 +84,7 @@ export default function BestSellers({ products }: Props) {
                   {rug.name}
                 </h3>
 
-                <p className="text-center text-[#5D3A9B] font-semibold mt-2">
-                  ${rug.price}
-                </p>
+                
               </Link>
             </SwiperSlide>
           ))}

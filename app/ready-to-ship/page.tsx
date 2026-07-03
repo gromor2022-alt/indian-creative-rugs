@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function ReadyToShipPage() {
   return (
-    <main className="bg-[#F4F0E8] min-h-screen">
+    <main className="bg-[#F7EADF] min-h-screen">
 
       {/* Hero */}
 

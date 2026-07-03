@@ -36,7 +36,7 @@ const collections = [
 
 export default function CollectionsPage() {
   return (
-    <main className="bg-[#F4F0E8] min-h-screen">
+    <main className="bg-[#F7EADF] min-h-screen">
 
       {/* Hero */}
       <section className="py-24 text-center">

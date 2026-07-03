@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function BhadohiStory() {
   return (
-    <section className="py-32 bg-[#F4F0E8]">
+    <section className="py-32 bg-[#F7EADF]">
 
       <div className="max-w-7xl mx-auto px-8">
 

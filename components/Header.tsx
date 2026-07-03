@@ -19,7 +19,7 @@ export default function Header() {
     <>
     <StatusBar />
     
-    <header className="bg-[#F4F0E8] border-b border-[#D9D1C7] sticky top-0 z-50">
+    <header className="bg-[#F7EADF] border-b border-[#D9D1C7] sticky top-0 z-50">
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10">
 

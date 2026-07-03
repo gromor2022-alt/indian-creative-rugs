@@ -110,7 +110,7 @@ export default function CheckoutPage() {
   };
 
   return (
-    <main className="bg-[#F4F0E8] min-h-screen">
+    <main className="bg-[#F7EADF] min-h-screen">
       <section className="max-w-[1500px] mx-auto px-6 py-16">
         <div className="mb-10">
           <p className="uppercase tracking-[4px] text-[#B89B5E] text-sm mb-2">

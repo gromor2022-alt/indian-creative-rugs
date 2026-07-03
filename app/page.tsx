@@ -13,7 +13,7 @@ export default async function Home() {
   const featuredProducts = await getFeaturedProducts();
 
   return (
-    <main className="min-h-screen bg-[#f6f2eb]">
+    <main className="min-h-screen bg-[#F7EADF]">
       <Hero />
 
       <BestSellers products={featuredProducts} />
