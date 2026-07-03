@@ -4,6 +4,7 @@ import Link from "next/link";
 import { User, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
+import StatusBar from "@/components/StatusBar";
 
 export default function Header() {
   const { cart } = useCart();
@@ -15,6 +16,9 @@ export default function Header() {
   );
 
   return (
+    <>
+    <StatusBar />
+    
     <header className="bg-[#F4F0E8] border-b border-[#D9D1C7] sticky top-0 z-50">
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10">
@@ -25,7 +29,7 @@ export default function Header() {
 
          <Link
   href="/"
-  className="font-instrument text-[19px] leading-none sm:text-[24px] md:text-[34px] text-[#5D5A3D] shrink-0"
+  className="font-instrument text-[21px] leading-none sm:text-[34px] md:text-[36px] text-[#5D5A3D] shrink-0"
 >
   Indian Creative Rugs
 </Link>
@@ -33,21 +37,21 @@ export default function Header() {
           {/* Desktop Navigation */}
 <nav
   aria-label="Primary navigation"
-  className="hidden lg:flex items-center ml-auto gap-10 xl:gap-12 text-[14px] xl:text-[15px] uppercase tracking-[3px] xl:tracking-[4px] text-[#5D5A3D]"
+  className="hidden lg:flex items-center ml-auto gap-10 xl:gap-12 text-[14px] xl:text-[15px] uppercase tracking-[3px] xl:tracking-[4px] text-[#4B2E83]"
 >
-  <Link href="/about" className="whitespace-nowrap hover:text-black transition-colors">
+  <Link href="/about" className="whitespace-nowrap hover:text-[#6A42B8] transition-colors duration-300">
     Our Story
   </Link>
 
-  <Link href="/rugs" className="whitespace-nowrap hover:text-black transition-colors">
+  <Link href="/rugs" className="whitespace-nowrap hover:text-[#6A42B8] transition-colors duration-300">
     Shop
   </Link>
 
-  <Link href="/collections" className="whitespace-nowrap hover:text-black transition-colors">
+  <Link href="/collections" className="whitespace-nowrap hover:text-[#6A42B8] transition-colors duration-300">
     Collections
   </Link>
 
-  <Link href="/ready-to-ship" className="whitespace-nowrap hover:text-black transition-colors">
+  <Link href="/ready-to-ship" className="whitespace-nowrap hover:text-[#6A42B8] transition-colors duration-300">
     Ready To Ship
   </Link>
 
@@ -59,10 +63,12 @@ export default function Header() {
 
 <Link
   href="/cart"
-  className="relative hover:text-black transition-colors"
+  className="whitespace-nowrap hover:text-[#6A42B8] transition-colors duration-300"
   aria-label="Shopping Cart"
 >
-  <ShoppingBag size={22} />
+  <ShoppingBag
+  className="w-6 h-6 text-[#4B2E83] hover:text-[#6A42B8] transition-colors duration-300"
+/>
 
   {cartCount > 0 && (
     <span className="absolute -top-2 -right-2 bg-[#B89B5E] text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
@@ -167,5 +173,6 @@ export default function Header() {
       )}
 
     </header>
+    </>
   );
 }

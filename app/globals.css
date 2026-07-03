@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+@import "tailwindcss";
+
+/* ---------- Ticker ---------- */
+
+.ticker {
+  display: flex;
+  width: max-content;
+  animation: ticker 25s linear infinite;
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
