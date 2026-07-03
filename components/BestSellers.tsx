@@ -67,7 +67,7 @@ export default function BestSellers({ products }: Props) {
           {products.map((rug) => (
             <SwiperSlide key={rug.id}>
               <Link
-                href={`/product/${rug.slug}`}
+                href={`/rugs/${rug.slug}`}
                 className="group block"
               >
                 <div className="overflow-hidden bg-white rounded-xl">
