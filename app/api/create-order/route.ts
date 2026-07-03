@@ -11,6 +11,7 @@ export async function POST(request: Request) {
 const customer = customerResponse.data[0];
 
 
+
     const order = {
      customer_id: customer ? Number(customer.id) : 0,  
       payment_method: "ppcp-gateway",
@@ -49,7 +50,7 @@ const customer = customerResponse.data[0];
       "orders",
       order
     );
-
+   console.log(JSON.stringify(response.data, null, 2));
     const orderId = response.data.id;
 
     const paymentUrl =

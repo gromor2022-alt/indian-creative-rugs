@@ -30,6 +30,18 @@ export async function POST(request: Request) {
       );
     }
 
+await fetch(
+  "https://backend.indiancreativerugs.com/wp-json/icr/v1/login",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: data.user_email,
+    }),
+  }
+);
     return NextResponse.json({
   success: true,
   token: data.token,

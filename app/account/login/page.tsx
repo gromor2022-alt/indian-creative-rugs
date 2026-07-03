@@ -19,6 +19,7 @@ const handleLogin = async (e: React.FormEvent) => {
   setError("");
 
   try {
+    // Step 1 - Login through Next.js
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
@@ -38,9 +39,26 @@ const handleLogin = async (e: React.FormEvent) => {
       return;
     }
 
+    // Step 2 - Save JWT locally
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data));
 
+    // Step 3 - Create WordPress login session
+    await fetch(
+      "https://backend.indiancreativerugs.com/wp-json/icr/v1/login",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: data.email,
+        }),
+      }
+    );
+
+    // Step 4 - Go to account page
     router.push("/account");
 
   } catch (error) {
