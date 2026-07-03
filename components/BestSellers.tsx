@@ -2,22 +2,33 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "@/data/products";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
 import "swiper/css";
 
-export default function BestSellers() {
+interface Product {
+  id: number;
+  slug: string;
+  name: string;
+  price: string;
+  images: {
+    src: string;
+  }[];
+}
+
+interface Props {
+  products: Product[];
+}
+
+export default function BestSellers({ products }: Props) {
   return (
     <section
-  id="best-sellers"
-  className="bg-[#F4F0E8] py-16 md:py-24 overflow-hidden"
->
-
+      id="best-sellers"
+      className="bg-[#F4F0E8] py-16 md:py-24 overflow-hidden"
+    >
       <div className="max-w-[1900px] mx-auto px-4 sm:px-6">
-
         <h2 className="font-instrument text-[40px] md:text-[54px] text-center text-[#22304A] mb-4">
           Shop Our Best Sellers
         </h2>
@@ -28,15 +39,15 @@ export default function BestSellers() {
 
         <Swiper
           modules={[Autoplay]}
-          loop={true}
+          loop
           speed={6000}
           autoplay={{
             delay: 0,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
           }}
-          allowTouchMove={true}
-          grabCursor={true}
+          allowTouchMove
+          grabCursor
           spaceBetween={20}
           breakpoints={{
             320: {
@@ -54,42 +65,33 @@ export default function BestSellers() {
           }}
         >
           {products.map((rug) => (
-            <SwiperSlide key={rug.slug}>
+            <SwiperSlide key={rug.id}>
               <Link
-                href={`/rugs/${rug.slug}`}
+                href={`/product/${rug.slug}`}
                 className="group block"
               >
-                <div className="overflow-hidden bg-white">
-
+                <div className="overflow-hidden bg-white rounded-xl">
                   <Image
-                    src={rug.image}
+                    src={rug.images?.[0]?.src || "/placeholder.jpg"}
                     alt={rug.name}
                     width={500}
                     height={700}
-                    className="
-                      w-full
-                      h-[220px]
-                      object-cover
-                      transition-transform
-                      duration-700
-                      ease-out
-                      group-hover:scale-110
-                    "
+                    className="w-full h-[430px] object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-
                 </div>
 
                 <h3 className="font-instrument text-[18px] text-[#22304A] text-center mt-4">
                   {rug.name}
                 </h3>
 
+                <p className="text-center text-[#5D3A9B] font-semibold mt-2">
+                  ${rug.price}
+                </p>
               </Link>
             </SwiperSlide>
           ))}
         </Swiper>
-
       </div>
-
     </section>
   );
 }

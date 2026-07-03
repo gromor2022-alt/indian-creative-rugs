@@ -7,13 +7,19 @@ import BhadohiStory from "../components/BhadohiStory";
 import AllRugs from "../components/AllRugs";
 import LeadTime from "../components/LeadTime";
 
-export default function Home() {
+import { getFeaturedProducts } from "@/lib/getFeaturedProducts";
+
+export default async function Home() {
+  const featuredProducts = await getFeaturedProducts();
+
   return (
     <main className="min-h-screen bg-[#f6f2eb]">
       <Hero />
-      <BestSellers />
+
+      <BestSellers products={featuredProducts} />
+
       <AllRugs />
-      <LeadTime />	
+      <LeadTime />
       <LuxuryBanner />
       <WhyChoose />
       <BhadohiStory />

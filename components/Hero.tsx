@@ -43,14 +43,14 @@ export default function Hero() {
 
   <a
     href="#best-sellers"
-    className="w-full md:w-auto bg-white text-[#22304A] px-6 sm:px-12 py-4 sm:py-5 uppercase tracking-[2px] text-sm hover:bg-[#F4F0E8] transition text-center"
+    className="bg-white text-[#5D3A9B] px-8 py-4 rounded-full font-medium uppercase tracking-[2px] hover:bg-[#F4F0E8] transition-all duration-300"
   >
     Shop Our Best Sellers
   </a>
 
   <a
     href="/rugs"
-    className="w-full md:w-auto border border-white text-white px-6 sm:px-12 py-4 sm:py-5 uppercase tracking-[2px] text-sm hover:bg-white hover:text-[#22304A] transition text-center"
+    className="bg-white text-[#5D3A9B] px-8 py-4 rounded-full font-medium uppercase tracking-[2px] hover:bg-[#F4F0E8] transition-all duration-300"
   >
     Shop All Rugs
   </a>

@@ -87,7 +87,7 @@ return ( <div>
         font-medium
       "
     >
-      🚚 Handcrafted To Order • Ships in 60–75 Days
+      🚚 Handcrafted To Order • Ships in 28-35 Days
     </span>
 
   </div>
