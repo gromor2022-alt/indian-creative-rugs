@@ -1,6 +1,6 @@
 export default function ContactPage() {
   return (
-    <main className="bg-[#F4F0E8] min-h-screen">
+    <main className="bg-[#F7EADF] min-h-screen">
       <section className="max-w-7xl mx-auto px-6 md:px-8 py-16">
 
         {/* Header */}
@@ -85,10 +85,10 @@ export default function ContactPage() {
                 </p>
 
                 <a
-                  href="mailto:info@indiancreativerugs.com"
+                  href="mailto:hello@indiancreativerugs.com"
                   className="text-lg text-[#22304A] hover:text-[#0F766E]"
                 >
-                  info@indiancreativerugs.com
+                  hello@indiancreativerugs.com
                 </a>
               </div>
 
