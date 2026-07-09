@@ -168,8 +168,9 @@ export default function CheckoutPage() {
 <Select
   options={countryOptions}
   value={countryOptions.find(
-    (option) => option.value === formData.country
-  )}
+  (option: { value: string; label: string }) =>
+    option.value === formData.country
+)}
   onChange={(selected) =>
     setFormData({
       ...formData,
