@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
+import { Navigation } from "swiper/modules";
 
 import "swiper/css";
+import "swiper/css/navigation";
 
 interface Product {
   id: number;
@@ -29,60 +30,65 @@ export default function BestSellers({ products }: Props) {
       className="bg-[#F7EADF] py-16 md:py-24 overflow-hidden"
     >
       <div className="max-w-[1900px] mx-auto px-4 sm:px-6">
-        <h2 className="font-instrument text-[40px] md:text-[54px] text-center text-[#22304A] mb-4">
-          Shop Our Best Sellers
-        </h2>
-
-        <p className="text-center text-gray-600 mb-10 md:mb-14">
-          Discover our most loved handcrafted rugs.
-        </p>
+        <h2 className="font-instrument text-[44px] md:text-[68px] leading-tight text-center text-[#556B2F] mb-5">
+  Curated Best Sellers
+</h2>
+<div className="flex justify-center mb-6">
+  <div className="w-20 h-[2px] bg-[#D4AF37] rounded-full"></div>
+</div>
+        <p className="max-w-2xl mx-auto text-center text-[18px] leading-8 text-[#7B7468] mb-14">
+  A curated collection of artisan-crafted rugs, chosen for their timeless elegance,
+  exceptional craftsmanship, and enduring beauty.
+</p>
 
         <Swiper
-          modules={[Autoplay]}
-          loop
-          speed={6000}
-          autoplay={{
-            delay: 0,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-          }}
+          modules={[Navigation]}
+          navigation
           allowTouchMove
           grabCursor
           spaceBetween={20}
           breakpoints={{
-            320: {
-              slidesPerView: 1.35,
-            },
-            480: {
-              slidesPerView: 2,
-            },
-            768: {
-              slidesPerView: 4,
-            },
-            1400: {
-              slidesPerView: 7,
-            },
-          }}
+  320: {
+    slidesPerView: 1.2,
+  },
+  480: {
+    slidesPerView: 1.8,
+  },
+  768: {
+    slidesPerView: 3,
+  },
+  1024: {
+    slidesPerView: 4,
+  },
+  1400: {
+    slidesPerView: 5,
+  },
+}}
         >
           {products.map((rug) => (
-            <SwiperSlide key={rug.id}>
+            <SwiperSlide
+  key={rug.id}
+  className="pb-6"
+>
               <Link
-                href={`/rugs/${rug.slug}`}
-                className="group block"
-              >
-                <div className="overflow-hidden bg-white rounded-xl">
+                
+  href={`/product/${rug.slug}`}
+  className="group block transition-all duration-500"
+>
+              
+                <div className="overflow-hidden rounded-[28px] bg-[#FCF8F2] shadow-sm transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl">
                   <Image
                     src={rug.images?.[0]?.src || "/placeholder.jpg"}
                     alt={rug.name}
                     width={500}
                     height={700}
-                    className="w-full h-[430px] object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-[520px] object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                 </div>
 
-                <h3 className="font-instrument text-[18px] text-[#22304A] text-center mt-4">
-                  {rug.name}
-                </h3>
+                <h3 className="mt-8 text-center font-instrument text-[24px] text-[#556B2F] tracking-[0.5px] transition-colors duration-300 group-hover:text-[#B68A35]">
+  {rug.name}
+</h3>
 
                 
               </Link>
