@@ -72,7 +72,7 @@ export default function BestSellers({ products }: Props) {
 >
               <Link
                 
-  href={`/product/${rug.slug}`}
+  href={`/rugs/${rug.slug}`}
   className="group block transition-all duration-500"
 >
               
