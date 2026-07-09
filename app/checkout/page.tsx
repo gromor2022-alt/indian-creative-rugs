@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
+import AddressAutocomplete from "@/components/AddressAutocomplete";
+import Select from "react-select";
+import countryList from "react-select-country-list";
+import { useMemo } from "react";
 
 export default function CheckoutPage() {
   const { cart } = useCart();
@@ -27,10 +31,11 @@ export default function CheckoutPage() {
   );
 
   const total = subtotal;
+  const countryOptions = useMemo(() => countryList().getData(), []);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+ const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -127,14 +132,13 @@ export default function CheckoutPage() {
             <h2 className="font-instrument text-[32px] text-[#22304A] mb-8">
               Billing Details
             </h2>
-
             <div className="grid md:grid-cols-2 gap-5">
               <input
                 name="firstName"
                 placeholder="First Name"
                 value={formData.firstName}
                 onChange={handleChange}
-                className="border border-[#D9D1C7] p-4 rounded-lg"
+                className="border border-[#D9D1C7] bg-[#FFFCF8] px-5 py-4 rounded-xl text-[#556B2F] placeholder:text-[#9B9488] transition-all duration-300 focus:border-[#556B2F] focus:ring-2 focus:ring-[#D4AF37]/30 focus:outline-none"
               />
 
               <input
@@ -142,7 +146,7 @@ export default function CheckoutPage() {
                 placeholder="Last Name"
                 value={formData.lastName}
                 onChange={handleChange}
-                className="border border-[#D9D1C7] p-4 rounded-lg"
+                className="border border-[#D9D1C7] bg-[#FFFCF8] px-5 py-4 rounded-xl text-[#556B2F] placeholder:text-[#9B9488] transition-all duration-300 focus:border-[#556B2F] focus:ring-2 focus:ring-[#D4AF37]/30 focus:outline-none"
               />
 
               <input
@@ -151,7 +155,7 @@ export default function CheckoutPage() {
                 placeholder="Email Address"
                 value={formData.email}
                 onChange={handleChange}
-                className="border border-[#D9D1C7] p-4 rounded-lg md:col-span-2"
+                className="border border-[#D9D1C7] bg-[#FFFCF8] px-5 py-4 rounded-xl text-[#556B2F] placeholder:text-[#9B9488] transition-all duration-300 focus:border-[#556B2F] focus:ring-2 focus:ring-[#D4AF37]/30 focus:outline-none md:col-span-2"
               />
 
               <input
@@ -159,23 +163,89 @@ export default function CheckoutPage() {
                 placeholder="Phone Number"
                 value={formData.phone}
                 onChange={handleChange}
-                className="border border-[#D9D1C7] p-4 rounded-lg md:col-span-2"
+                className="border border-[#D9D1C7] bg-[#FFFCF8] px-5 py-4 rounded-xl text-[#556B2F] placeholder:text-[#9B9488] transition-all duration-300 focus:border-[#556B2F] focus:ring-2 focus:ring-[#D4AF37]/30 focus:outline-none md:col-span-2"
               />
+<Select
+  options={countryOptions}
+  value={countryOptions.find(
+    (option) => option.value === formData.country
+  )}
+  onChange={(selected) =>
+    setFormData({
+      ...formData,
+      country: selected?.value || "",
+    })
+  }
+  placeholder="Select Country"
+  classNamePrefix="react-select"
+  styles={{
+    control: (base) => ({
+      ...base,
+      minHeight: "58px",
+      borderRadius: "12px",
+      borderColor: "#D9D1C7",
+      backgroundColor: "#FFFFFF",
+      boxShadow: "none",
+      "&:hover": {
+        borderColor: "#556B2F",
+      },
+    }),
 
-              <input
-                name="address"
-                placeholder="Address"
-                value={formData.address}
-                onChange={handleChange}
-                className="border border-[#D9D1C7] p-4 rounded-lg md:col-span-2"
-              />
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isFocused
+        ? "#F7EADF"
+        : "#FFFFFF",
+      color: "#556B2F",
+      cursor: "pointer",
+    }),
+
+    singleValue: (base) => ({
+      ...base,
+      color: "#556B2F",
+      fontWeight: 500,
+    }),
+
+    placeholder: (base) => ({
+      ...base,
+      color: "#8B8B8B",
+    }),
+
+    menu: (base) => ({
+      ...base,
+      borderRadius: "12px",
+      overflow: "hidden",
+      zIndex: 9999,
+    }),
+  }}
+/>
+              <div className="md:col-span-2">
+
+  <label className="block text-sm font-medium text-[#556B2F] mb-2">
+    Address
+  </label>
+
+  <AddressAutocomplete
+    onSelect={(address) =>
+      setFormData({
+        ...formData,
+        address: address.address,
+        city: address.city,
+        state: address.state,
+        zipCode: address.zipCode,
+        country: address.country,
+      })
+    }
+  />
+
+</div>
 
               <input
                 name="city"
                 placeholder="City"
                 value={formData.city}
                 onChange={handleChange}
-                className="border border-[#D9D1C7] p-4 rounded-lg"
+                className="border border-[#D9D1C7] bg-[#FFFCF8] px-5 py-4 rounded-xl text-[#556B2F] placeholder:text-[#9B9488] transition-all duration-300 focus:border-[#556B2F] focus:ring-2 focus:ring-[#D4AF37]/30 focus:outline-none"
               />
 
               <input
@@ -183,7 +253,7 @@ export default function CheckoutPage() {
                 placeholder="State"
                 value={formData.state}
                 onChange={handleChange}
-                className="border border-[#D9D1C7] p-4 rounded-lg"
+                className="border border-[#D9D1C7] bg-[#FFFCF8] px-5 py-4 rounded-xl text-[#556B2F] placeholder:text-[#9B9488] transition-all duration-300 focus:border-[#556B2F] focus:ring-2 focus:ring-[#D4AF37]/30 focus:outline-none"
               />
 
               <input
@@ -191,7 +261,7 @@ export default function CheckoutPage() {
                 placeholder="ZIP Code"
                 value={formData.zipCode}
                 onChange={handleChange}
-                className="border border-[#D9D1C7] p-4 rounded-lg md:col-span-2"
+                className="border border-[#D9D1C7] bg-[#FFFCF8] px-5 py-4 rounded-xl text-[#556B2F] placeholder:text-[#9B9488] transition-all duration-300 focus:border-[#556B2F] focus:ring-2 focus:ring-[#D4AF37]/30 focus:outline-none md:col-span-2"
               />
             </div>
           </div>
@@ -250,25 +320,59 @@ export default function CheckoutPage() {
                   </span>
                 </div>
               </div>
+<div className="mt-6 space-y-3 rounded-xl bg-[#FDFBF7] border border-[#ECE5DA] p-5">
 
+  <div className="flex items-center gap-3 text-[#556B2F]">
+    <span>🔒</span>
+    <span className="text-sm font-medium">
+      256-bit SSL Secure Checkout
+    </span>
+  </div>
+
+  <div className="flex items-center gap-3 text-[#556B2F]">
+    <span>🚚</span>
+    <span className="text-sm font-medium">
+      Free Worldwide Shipping
+    </span>
+  </div>
+
+    <div className="flex items-center gap-3 text-[#556B2F]">
+    <span>💳</span>
+    <span className="text-sm font-medium">
+      Secure Payment via PayPal
+    </span>
+  </div>
+
+</div>
               <button
                 onClick={handlePlaceOrder}
                 disabled={loading}
                 className="
-                  w-full
-                  mt-8
-                  bg-[#5D5A3D]
-                  hover:bg-[#4B482F]
-                  text-white
-                  py-4
-                  rounded-xl
-                  transition
-                "
+w-full
+mt-8
+bg-[#556B2F]
+hover:bg-[#435522]
+text-white
+py-4
+rounded-xl
+font-semibold
+tracking-[1px]
+transition-all
+duration-300
+hover:shadow-xl
+hover:scale-[1.02]
+disabled:opacity-70
+disabled:cursor-not-allowed
+"
               >
                 {loading
-                  ? "Creating Order..."
-                  : "Proceed To PayPal"}
+  ? "Creating Secure Checkout..."
+  : "Secure Checkout with PayPal"}
               </button>
+<p className="mt-4 text-center text-sm text-[#7A7468] leading-relaxed">
+  Your payment is securely processed through <strong>PayPal</strong>.
+  We never store your card or banking information.
+</p>
             </div>
           </div>
         </div>
