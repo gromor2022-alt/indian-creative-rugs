@@ -4,14 +4,7 @@ import { getProducts } from "@/lib/getProducts";
 
 export default async function RugsPage() {
   const products = await getProducts();
-  products.forEach((p: any) => {
-  console.log(
-    "NAME:",
-    p.name,
-    "| SLUG:",
-    p.slug
-  );
-});
+  
 
   return (
     <main className="bg-[#F7EADF] min-h-screen">

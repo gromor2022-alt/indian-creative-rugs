@@ -15,8 +15,14 @@ export async function getProducts() {
       image:
         product.images?.[0]?.src || "/images/persian/rugs1.jpg",
       images: product.images || [],
-      collection:
-        product.categories?.[0]?.name || "Luxury Rugs",
+      collection: product.categories?.[0]?.name || "Luxury Rugs",
+
+collections:
+  product.categories?.map((cat: any) => ({
+    id: cat.id,
+    name: cat.name,
+    slug: cat.slug,
+  })) || [],
     }));
   } catch (error) {
     console.error("WooCommerce Error:", error);

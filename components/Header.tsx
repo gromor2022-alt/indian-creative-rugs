@@ -75,15 +75,16 @@ export default function Header() {
 
 <Link
   href="/cart"
-  className="whitespace-nowrap hover:text-[#B68A35] transition-colors duration-300"
+  className="relative inline-flex items-center justify-center whitespace-nowrap hover:text-[#B68A35] transition-colors duration-300"
   aria-label="Shopping Cart"
+
 >
   <ShoppingBag
   className="relative whitespace-nowrap transition-all duration-300 hover:text-[#B68A35]"
 />
 
   {cartCount > 0 && (
-    <span className="absolute -top-2 -right-2 bg-[#B68A35] text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">
+    <span className="absolute -top-2 -right-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#B68A35] text-[10px] font-semibold text-white shadow-md">
       {cartCount}
     </span>
   )}
