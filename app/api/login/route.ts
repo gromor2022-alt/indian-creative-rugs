@@ -5,13 +5,16 @@ import { createSession } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json();
+   const { email, password } = await req.json();
+console.log("Login email:", email);
 
-    const admin = await prisma.admin.findUnique({
-      where: {
-        email,
-      },
-    });
+const admin = await prisma.admin.findUnique({
+  where: {
+    email,
+  },
+});
+
+console.log("Admin found:", admin);
 
     if (!admin) {
       return NextResponse.json(
