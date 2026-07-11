@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -63,17 +64,26 @@ export default function LoginPage() {
           />
 
           <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            required
-            className="w-full rounded-xl border border-[#DDD6CC] px-5 py-4 outline-none focus:border-[#556B2F]"
-          />
+  name="password"
+  type="password"
+  placeholder="Password"
+  required
+  className="w-full rounded-xl border border-[#DDD6CC] px-5 py-4 outline-none focus:border-[#556B2F]"
+/>
 
-          <button
-            disabled={loading}
-            className="w-full rounded-xl bg-[#556B2F] py-4 font-semibold text-white transition hover:bg-[#6C8442] disabled:opacity-50"
-          >
+<div className="flex justify-end">
+  <Link
+    href="/forgot-password"
+    className="text-sm text-[#556B2F] hover:underline"
+  >
+    Forgot Password?
+  </Link>
+</div>
+
+<button
+  disabled={loading}
+  className="w-full rounded-xl bg-[#556B2F] py-4 font-semibold text-white transition hover:bg-[#6C8442] disabled:opacity-50"
+>
             {loading ? "Signing In..." : "Sign In"}
           </button>
 

@@ -69,3 +69,25 @@ export async function getAllOrders() {
 
   }
 }
+
+export async function getCustomers() {
+  try {
+    const response = await WooCommerce.get("customers?per_page=100");
+
+    return response.data;
+  } catch (error) {
+    console.error("Customers Fetch Error:", error);
+    return [];
+  }
+}
+
+
+export async function getCustomerById(id: string) {
+  try {
+    const response = await WooCommerce.get(`customers/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Customer Fetch Error:", error);
+    return null;
+  }
+}

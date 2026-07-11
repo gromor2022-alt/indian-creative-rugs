@@ -11,12 +11,12 @@ const stats = await getDashboardStats();
       <div className="mb-10">
 
         <h1 className="font-instrument text-5xl text-[#2F4F2F]">
-          Have a Good Day 👋
-        </h1>
+  Welcome Back, ICR 👋
+</h1>
 
-        <p className="mt-3 text-[#7B7468]">
-          Welcome back. Here's what's happening today.
-        </p>
+<p className="mt-3 text-[#7B7468]">
+  Here's what's happening today.
+</p>
 
       </div>
 

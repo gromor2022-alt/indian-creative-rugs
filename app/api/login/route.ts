@@ -35,7 +35,11 @@ console.log("Admin found:", admin);
       );
     }
 
-    const token = await createSession(admin.email);
+    const token = await createSession({
+  id: admin.id,
+  name: admin.name,
+  email: admin.email,
+});
 
     const response = NextResponse.json({
       success: true,
