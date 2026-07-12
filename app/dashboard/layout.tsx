@@ -19,7 +19,7 @@ export default function DashboardLayout({
           </h1>
 
           <p className="mt-2 text-sm text-[#D9D4C7]">
-            Business Dashboard
+            Business ERP
           </p>
 
         </div>
@@ -58,28 +58,21 @@ export default function DashboardLayout({
 
   <header className="h-20 bg-white border-b border-[#E5DED2] flex items-center justify-between px-8">
 
-    <input
-      type="text"
-      placeholder="Search orders, customers..."
-      className="w-96 rounded-full border border-[#DDD6CC] px-5 py-3 outline-none focus:border-[#B68A35]"
-    />
+ 
 
     <div className="flex items-center gap-6">
 
-      <button className="text-2xl">
-        🔔
-      </button>
-
+      
       <div className="flex items-center gap-3">
 
         <div className="w-11 h-11 rounded-full bg-[#2F4F2F] text-white flex items-center justify-center font-semibold">
-          A
+          ICR
         </div>
 
         <div>
 
           <p className="font-medium text-[#2F4F2F]">
-            AffiNexa
+            ICR
           </p>
 
           <p className="text-sm text-[#7B7468]">
