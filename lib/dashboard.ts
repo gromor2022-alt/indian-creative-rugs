@@ -4,33 +4,47 @@ export async function getDashboardStats() {
   try {
 
     const [ordersResponse] = await Promise.all([
-      WooCommerce.get("orders?per_page=5"),
-    ]);
+  WooCommerce.get("orders?per_page=100"),
+]);
 
-    const orders = ordersResponse.data;
+const orders = ordersResponse.data;
 
-    const totalOrders = orders.length;
+const recentOrders = orders.slice(0, 5);
 
-    const pendingOrders = orders.filter(
-      (order: any) =>
-        order.status === "pending" ||
-        order.status === "processing"
-    ).length;
+const totalOrders = Number(
+  ordersResponse.headers["x-wp-total"] ??
+  ordersResponse.headers["X-WP-Total"] ??
+  orders.length
+);
+
+const pendingOrders = orders.filter(
+  (order: any) =>
+    order.status === "pending" ||
+    order.status === "processing"
+).length;
+
 const completedOrders = orders.filter(
   (order: any) => order.status === "completed"
 ).length;
-    const revenue = orders.reduce(
-      (sum: number, order: any) =>
-        sum + Number(order.total),
-      0
-    );
 
-    return {
+const revenue = orders
+  .filter(
+    (order: any) =>
+      order.status === "processing" ||
+      order.status === "completed"
+  )
+  .reduce(
+    (sum: number, order: any) =>
+      sum + Number(order.total || 0),
+    0
+  );
+
+return {
   totalOrders,
   pendingOrders,
   completedOrders,
   revenue,
-  recentOrders: orders,
+  recentOrders,
 };
 
   } catch (error) {

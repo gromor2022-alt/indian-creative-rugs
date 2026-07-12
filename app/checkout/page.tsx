@@ -47,7 +47,7 @@ export default function CheckoutPage() {
       alert("Cart is empty");
       return;
     }
-
+console.log("Form Data:", formData);
     if (
       !formData.firstName ||
       !formData.lastName ||
