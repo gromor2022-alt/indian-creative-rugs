@@ -16,12 +16,21 @@ model Enquiry {
   status    String   @default("New")
   createdAt DateTime @default(now())
 }
+
 model Admin {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  resetToken       String?
-  resetTokenExpiry DateTime?
-  createdAt DateTime @default(now())
+  id                Int      @id @default(autoincrement())
+  name              String
+  email             String   @unique
+  password          String
+
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+
+  createdAt         DateTime @default(now())
+}
+
+model playing_with_neon {
+  id    Int    @id @default(autoincrement())
+  name  String
+  value Float? @db.Real
 }
