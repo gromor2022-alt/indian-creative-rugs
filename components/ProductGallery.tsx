@@ -3,29 +3,34 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
+interface ProductImage {
+  src: string;
+}
+
+interface Props {
+  images: ProductImage[];
+  name: string;
+}
+
 export default function ProductGallery({
   images = [],
   name,
-}: {
-  images: any[];
-  name: string;
-}) {
-  const [selectedImage, setSelectedImage] = useState("");
+}: Props) {
+  const validImages = images.filter((img) => img?.src);
+
+  const [selectedImage, setSelectedImage] = useState(
+  validImages[0]?.src ?? ""
+);
 
   useEffect(() => {
-  console.log(images);
-    const validImage = images.find((img) => img?.src);
-
-    if (validImage) {
-      setSelectedImage(validImage.src);
+    if (validImages.length > 0) {
+      setSelectedImage(validImages[0].src);
     }
   }, [images]);
 
-  const validImages = images.filter((img) => img?.src);
-
   if (validImages.length === 0) {
     return (
-      <div className="w-full aspect-[4/5] bg-white border flex items-center justify-center text-gray-500">
+      <div className="w-full aspect-[4/5] rounded-xl border bg-gray-100 flex items-center justify-center">
         No Image Available
       </div>
     );
@@ -33,25 +38,26 @@ export default function ProductGallery({
 
   return (
     <div className="flex flex-col lg:flex-row gap-5">
+
       {/* Thumbnails */}
 
       <div className="flex lg:flex-col gap-3 order-2 lg:order-1">
-        {validImages.map((img: any, index: number) => (
+        {validImages.map((img, index) => (
           <button
             key={index}
-            type="button"
             onClick={() => setSelectedImage(img.src)}
-            className={`border overflow-hidden w-20 h-20 transition ${
+            className={`w-20 h-20 overflow-hidden rounded-lg border-2 transition-all ${
               selectedImage === img.src
                 ? "border-[#22304A]"
-                : "border-gray-300"
+                : "border-gray-200"
             }`}
           >
             <Image
               src={img.src}
               alt={`${name} ${index + 1}`}
-              width={100}
-              height={100}
+              width={120}
+              height={120}
+              quality={85}
               className="w-full h-full object-cover"
             />
           </button>
@@ -60,18 +66,21 @@ export default function ProductGallery({
 
       {/* Main Image */}
 
-      <div className="flex-1 order-1 lg:order-2">
-        {selectedImage && (
-          <Image
-            src={selectedImage}
-            alt={name}
-            width={900}
-            height={1100}
-            className="w-full h-auto object-cover"
-            priority
-          />
-        )}
-      </div>
+<div className="flex-1">
+  {selectedImage && (
+    <Image
+      src={selectedImage}
+      alt={name}
+      width={1200}
+      height={1500}
+      quality={100}
+      priority
+      sizes="(max-width:768px) 100vw, 60vw"
+      className="w-full h-auto rounded-xl object-cover"
+    />
+  )}
+</div>
+
     </div>
   );
 }

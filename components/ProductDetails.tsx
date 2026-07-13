@@ -15,7 +15,9 @@ const router = useRouter();
 
 const [shape, setShape] = useState("Rectangle");
 const [size, setSize] = useState("2x3");
-const [price, setPrice] = useState(199);
+const [price, setPrice] = useState(
+  Number(product.price) || 0
+);
 const [quantity, setQuantity] = useState(1);
 
 const cartItem = {

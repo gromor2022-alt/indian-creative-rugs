@@ -1,3 +1,6 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+import { productSchema } from "@/lib/schema";
 import ProductDetails from "@/components/ProductDetails";
 import ProductGallery from "@/components/ProductGallery";
 import { notFound } from "next/navigation";
@@ -10,59 +13,85 @@ async function getProduct(slug: string) {
     }
   );
 
+  if (!res.ok) return null;
+
   return res.json();
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+
+  const product = await getProduct(slug);
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+    };
+  }
+
+  return generateSEO({
+    title: product.name,
+    description:
+      product.short_description?.replace(/<[^>]+>/g, "") ||
+      product.description?.replace(/<[^>]+>/g, "").slice(0, 160) ||
+      "Luxury Handmade Rug from Indian Creative Rugs.",
+
+    url: `/rugs/${product.slug}`,
+
+    image:
+      product.images?.[0]?.src ||
+      "/og-image.jpg",
+
+    keywords: [
+      product.name,
+      "Handmade Rug",
+      "Luxury Rug",
+      "Indian Rug",
+      "Area Rug",
+      "Persian Rug",
+      "Oushak Rug",
+      "Vintage Rug",
+      "Home Decor",
+    ],
+  });
+}
 export default async function ProductPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  console.log("PAGE SLUG =", slug);
+
   const product = await getProduct(slug);
 
-console.log("PRODUCT =", product);
-
-if (!product) {
-  return <div>No Product Returned</div>;
-}
-
-if (product.code) {
-  return (
-    <div style={{ padding: "50px" }}>
-      API ERROR:
-      <pre>{JSON.stringify(product, null, 2)}</pre>
-    </div>
-  );
-}
-
+  if (!product) {
+    notFound();
+  }
+const schema = productSchema(product);
   return (
     <main className="bg-[#FFFFFF] min-h-screen">
-
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify(schema),
+  }}
+/>
       <div className="max-w-[1500px] mx-auto px-8 py-14">
-
-              {/* Product */}
-
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
+          <ProductGallery
+            images={product.images}
+            name={product.name}
+          />
 
-          {/* Images */}
-
-          <div>
-            <ProductGallery
-              images={product.images}
-              name={product.name}
-            />
-          </div>
-
-          {/* Product Info */}
-
-        <ProductDetails product={product} />
-
-         </div>
-
+          <ProductDetails
+            product={product}
+          />
+        </div>
       </div>
-
-     </main>
+    </main>
   );
 }
