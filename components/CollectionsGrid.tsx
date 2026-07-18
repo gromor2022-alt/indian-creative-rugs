@@ -1,12 +1,7 @@
 import Image from "next/image";
 
 const collections = [
-  {
-    name: "Tufted",
-    description: "Soft vintage elegance inspired by timeless Anatolian designs.",
-    image: "/images/collections/oushak.jpg",
-    link: "/collections/tufted",
-  },
+  
   {
     name: "Persian",
     description: "Intricate motifs and rich heritage for sophisticated interiors.",

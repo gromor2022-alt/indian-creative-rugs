@@ -40,7 +40,7 @@ export default function Hero() {
             href="/rugs"
             className="rounded-full bg-[#D4AF37] px-8 py-4 font-semibold uppercase tracking-[2px] text-[#234B36] transition hover:scale-105 hover:shadow-xl"
           >
-            Explore Collection
+            Shop All
           </a>
 
           <a
