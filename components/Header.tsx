@@ -156,7 +156,41 @@ export default function Header() {
   >
     Collections
   </Link>
+<div className="ml-4 mt-2 mb-3 flex flex-col gap-2 text-sm text-[#6B5B4D]">
 
+  <Link
+    href="/collections/persian"
+    onClick={() => setMobileMenuOpen(false)}
+    className="hover:text-[#A67C52]"
+  >
+    Persian
+  </Link>
+
+  <Link
+    href="/collections/heritage"
+    onClick={() => setMobileMenuOpen(false)}
+    className="hover:text-[#A67C52]"
+  >
+    Heritage
+  </Link>
+
+  <Link
+    href="/collections/vintage"
+    onClick={() => setMobileMenuOpen(false)}
+    className="hover:text-[#A67C52]"
+  >
+    Vintage
+  </Link>
+
+  <Link
+    href="/collections/modern"
+    onClick={() => setMobileMenuOpen(false)}
+    className="hover:text-[#A67C52]"
+  >
+    Modern
+  </Link>
+
+</div>
   <Link
     href="/ready-to-ship"
     onClick={() => setMobileMenuOpen(false)}

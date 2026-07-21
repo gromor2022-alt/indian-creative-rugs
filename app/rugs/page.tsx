@@ -25,33 +25,31 @@ export default async function RugsPage() {
 
       {/* Categories */}
 
-      <section className="max-w-7xl mx-auto px-8 mb-12">
+      <div className="mb-10 flex flex-wrap justify-center gap-4">
 
-        <div className="flex flex-wrap gap-4 justify-center">
+  <Link href="/rugs" className="rounded-full border border-[#355E3B] px-6 py-2 text-sm font-semibold tracking-wide text-[#355E3B] transition-all duration-300 hover:bg-[#355E3B] hover:text-white">
+    All
+  </Link>
 
-          <button className="border px-5 py-2">
-            All
-          </button>
+  <Link href="/collections/persian" className="border px-5 py-2 hover:bg-[#22304A] hover:text-white transition">
+    Persian
+  </Link>
 
-          <button className="border px-5 py-2">
-            Persian
-          </button>
+  <Link href="/collections/heritage" className="border px-5 py-2 hover:bg-[#22304A] hover:text-white transition">
+    Heritage
+  </Link>
 
-          <button className="border px-5 py-2">
-            Heritage
-          </button>
+  <Link href="/collections/vintage" className="border px-5 py-2 hover:bg-[#22304A] hover:text-white transition">
+    Vintage
+  </Link>
 
-          <button className="border px-5 py-2">
-            Vintage
-          </button>
+  <Link href="/collections/modern" className="border px-5 py-2 hover:bg-[#22304A] hover:text-white transition">
+    Modern
+  </Link>
 
-          <button className="border px-5 py-2">
-            Modern
-          </button>
+</div>
 
-        </div>
-
-      </section>
+     
 
       {/* Products */}
 
