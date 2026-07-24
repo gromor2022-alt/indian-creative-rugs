@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 import { getAllOrders } from "@/lib/dashboard";
 import OrderCard from "@/components/dashboard/OrderCard";
 import OrderKPICards from "@/components/dashboard/OrderKPICards";
@@ -45,7 +47,7 @@ export default async function OrdersPage() {
 
      
       {/* Existing Order Cards */}
-<OrderKPICards />
+<OrderKPICards orders={orders} />
 <OrdersToolbar />
       <div className="space-y-5">
         {orders.map((order: any) => (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   open: boolean;
@@ -16,6 +17,7 @@ export default function UpdateShipDateModal({
 
   const [shipDate, setShipDate] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   if (!open) return null;
 
@@ -48,7 +50,7 @@ export default function UpdateShipDateModal({
 
         onClose();
 
-        window.location.reload();
+        router.refresh();
 
       } else {
 

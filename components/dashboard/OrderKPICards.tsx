@@ -1,40 +1,66 @@
-export default function OrderKPICards() {
+interface Props {
+  orders: any[];
+}
+
+export default function OrderKPICards({ orders }: Props) {
+  const pending = orders.filter(
+    (o) => o.status === "pending"
+  ).length;
+
+  const processing = orders.filter(
+    (o) => o.status === "processing"
+  ).length;
+
+  const completed = orders.filter(
+    (o) => o.status === "completed"
+  ).length;
+
+  const cancelled = orders.filter(
+    (o) => o.status === "cancelled"
+  ).length;
+
+  const totalOrders = orders.length;
+
+  const revenue = orders
+    .filter((o) => o.status === "completed")
+    .reduce((sum, order) => sum + Number(order.total), 0);
+
   const cards = [
     {
-      title: "New Orders",
-      value: 18,
-      color: "bg-blue-50",
-      text: "text-blue-700",
+      title: "Pending",
+      value: pending,
+      color: "bg-orange-50",
+      text: "text-orange-700",
     },
     {
-      title: "In Production",
-      value: 42,
+      title: "Processing",
+      value: processing,
       color: "bg-yellow-50",
       text: "text-yellow-700",
     },
     {
-      title: "Ready to Ship",
-      value: 8,
-      color: "bg-purple-50",
-      text: "text-purple-700",
-    },
-    {
-      title: "Shipped",
-      value: 12,
-      color: "bg-indigo-50",
-      text: "text-indigo-700",
-    },
-    {
       title: "Completed",
-      value: 315,
+      value: completed,
       color: "bg-green-50",
       text: "text-green-700",
     },
     {
       title: "Cancelled",
-      value: 3,
+      value: cancelled,
       color: "bg-red-50",
       text: "text-red-700",
+    },
+    {
+      title: "Revenue",
+      value: `$${revenue.toFixed(2)}`,
+      color: "bg-blue-50",
+      text: "text-blue-700",
+    },
+    {
+      title: "Total Orders",
+      value: totalOrders,
+      color: "bg-gray-50",
+      text: "text-gray-700",
     },
   ];
 
@@ -45,7 +71,9 @@ export default function OrderKPICards() {
           key={card.title}
           className={`rounded-2xl border border-[#E7E1D8] p-6 shadow-sm transition hover:shadow-md ${card.color}`}
         >
-          <p className="text-sm text-gray-600">{card.title}</p>
+          <p className="text-sm text-gray-600">
+            {card.title}
+          </p>
 
           <h2 className={`mt-3 text-3xl font-bold ${card.text}`}>
             {card.value}
