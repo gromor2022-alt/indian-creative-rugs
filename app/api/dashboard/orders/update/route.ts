@@ -12,6 +12,9 @@ export async function POST(req: NextRequest) {
   carrier,
   trackingNumber,
   pickupDate,
+  refundStatus,
+  refundReason,
+  refundRequestedAt,
 } = body;
 
     const meta_data = [];
@@ -42,7 +45,26 @@ if (pickupDate) {
     value: pickupDate,
   });
 }
+if (refundStatus) {
+  meta_data.push({
+    key: "_icr_refund_status",
+    value: refundStatus,
+  });
+}
 
+if (refundReason) {
+  meta_data.push({
+    key: "_icr_refund_reason",
+    value: refundReason,
+  });
+}
+
+if (refundRequestedAt) {
+  meta_data.push({
+    key: "_icr_refund_requested_at",
+    value: refundRequestedAt,
+  });
+}
     const payload: any = {};
 
     if (status) {

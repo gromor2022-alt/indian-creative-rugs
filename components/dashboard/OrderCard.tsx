@@ -7,6 +7,7 @@ import UpdateShipDateModal from "@/components/dashboard/UpdateShipDateModal";
 import ShippingModal from "@/components/dashboard/ShippingModal";
 import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
 import { getTrackingUrl } from "@/lib/tracking";
+import RefundModal from "@/components/dashboard/RefundModal";
 
 interface OrderCardProps {
   order: any;
@@ -21,6 +22,9 @@ const [completing, setCompleting] = useState(false);
 const router = useRouter();
 const [showCancelModal, setShowCancelModal] = useState(false);
 const [cancelling, setCancelling] = useState(false);
+const [showRefundModal, setShowRefundModal] = useState(false);
+const [refundReason, setRefundReason] = useState("");
+const [refunding, setRefunding] = useState(false);
 
 async function markAsShipped() {
 
@@ -172,10 +176,6 @@ console.log({
   📅 Update Ship Date
 </button>
 
-      <button className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition">
-        🚚 Ready for Shipping
-      </button>
-
       <button
   onClick={() => {
     setShowMenu(false);
@@ -218,9 +218,15 @@ console.log({
   🚚 Mark as Shipped
 </button>
 
-      <button className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition">
-        💸 Refund
-      </button>
+      <button
+  onClick={() => {
+    setShowRefundModal(true);
+    setShowMenu(false);
+  }}
+  className="block w-full px-4 py-2 text-left text-orange-600 hover:bg-orange-50"
+>
+  💰 Request Refund
+</button>
 
       <button
   onClick={() => {
@@ -346,6 +352,14 @@ console.log({
   onConfirm={cancelOrder}
   loading={cancelling}
 />
+
+<RefundModal
+  open={showRefundModal}
+  onClose={() => setShowRefundModal(false)}
+  order={order}
+  onSuccess={() => router.refresh()}
+/>
+
   </div>
   );
 }	
