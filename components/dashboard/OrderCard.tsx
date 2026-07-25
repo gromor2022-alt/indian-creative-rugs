@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import UpdateShipDateModal from "@/components/dashboard/UpdateShipDateModal";
 import ShippingModal from "@/components/dashboard/ShippingModal";
+import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
 
 interface OrderCardProps {
   order: any;
@@ -13,6 +15,58 @@ export default function OrderCard({ order }: OrderCardProps) {
 const [showMenu, setShowMenu] = useState(false);
 const [showShipDateModal, setShowShipDateModal] = useState(false);
 const [showShippingModal, setShowShippingModal] = useState(false);
+const [showCompleteModal, setShowCompleteModal] = useState(false);
+const [completing, setCompleting] = useState(false);
+const router = useRouter();
+
+async function markAsShipped() {
+
+  setCompleting(true);
+
+  try {
+
+    const response = await fetch("/api/dashboard/orders/update", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        orderId: order.id,
+        status: "completed",
+      }),
+
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+
+      alert("Order marked as shipped successfully ✅");
+
+      setShowCompleteModal(false);
+
+      router.refresh();
+
+    } else {
+
+      alert(data.message);
+
+    }
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Something went wrong.");
+
+  }
+
+  setCompleting(false);
+
+}
 
   return (
     <div className="rounded-2xl border border-[#E8E2D9] bg-white p-6 transition hover:shadow-md">
@@ -88,9 +142,15 @@ const [showShippingModal, setShowShippingModal] = useState(false);
         🔢 Add Tracking Number
       </button>
 
-      <button className="w-full px-4 py-3 text-left hover:bg-[#F8F6F2] text-green-700">
-        ✅ Mark Complete
-      </button>
+      <button
+  onClick={() => {
+    setShowMenu(false);
+    setShowCompleteModal(true);
+  }}
+  className="w-full px-4 py-3 text-left text-green-700 hover:bg-[#F8F6F2]"
+>
+  🚚 Mark as Shipped
+</button>
 
       <button className="w-full px-4 py-3 text-left hover:bg-[#FFF5F5] text-orange-600">
         💸 Refund
@@ -149,7 +209,32 @@ const [showShippingModal, setShowShippingModal] = useState(false);
 )?.value || "Not Set"}
             </span>
           </p>
+<p className="mt-2 text-sm text-[#7B7468]">
+  Carrier:
+  <span className="ml-2 font-medium text-[#2F4F2F]">
+    {order.meta_data?.find(
+      (meta: any) => meta.key === "_icr_carrier"
+    )?.value || "Not Assigned"}
+  </span>
+</p>
 
+<p className="mt-2 text-sm text-[#7B7468]">
+  Tracking:
+  <span className="ml-2 font-medium text-[#2F4F2F]">
+    {order.meta_data?.find(
+      (meta: any) => meta.key === "_icr_tracking_number"
+    )?.value || "Not Assigned"}
+  </span>
+</p>
+
+<p className="mt-2 text-sm text-[#7B7468]">
+  Pickup Date:
+  <span className="ml-2 font-medium text-[#2F4F2F]">
+    {order.meta_data?.find(
+      (meta: any) => meta.key === "_icr_pickup_date"
+    )?.value || "Not Scheduled"}
+  </span>
+</p>
         </div>
 
         <Link
@@ -169,7 +254,17 @@ const [showShippingModal, setShowShippingModal] = useState(false);
 <ShippingModal
   open={showShippingModal}
   onClose={() => setShowShippingModal(false)}
+  orderId={order.id}
+/>  
+<ConfirmationModal
+  open={showCompleteModal}
+  title="Mark Order as Shipped?"
+  message="This will move the order to the Completed tab. Continue?"
+  confirmText="Yes, Mark Shipped"
+  onCancel={() => setShowCompleteModal(false)}
+  onConfirm={markAsShipped}
+  loading={completing}
 />
-    </div>
+  </div>
   );
 }	

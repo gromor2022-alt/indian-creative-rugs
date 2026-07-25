@@ -6,12 +6,13 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     const {
-      orderId,
-      status,
-      shipDate,
-      carrier,
-      trackingNumber,
-    } = body;
+  orderId,
+  status,
+  shipDate,
+  carrier,
+  trackingNumber,
+  pickupDate,
+} = body;
 
     const meta_data = [];
 
@@ -35,6 +36,12 @@ export async function POST(req: NextRequest) {
         value: trackingNumber,
       });
     }
+if (pickupDate) {
+  meta_data.push({
+    key: "_icr_pickup_date",
+    value: pickupDate,
+  });
+}
 
     const payload: any = {};
 
