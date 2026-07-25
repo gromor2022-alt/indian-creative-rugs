@@ -3,8 +3,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 import { getAllOrders } from "@/lib/dashboard";
 import OrderCard from "@/components/dashboard/OrderCard";
-import OrderKPICards from "@/components/dashboard/OrderKPICards";
-import OrdersToolbar from "@/components/dashboard/OrdersToolbar";
+
 
 export default async function OrdersPage({
   searchParams,
@@ -34,22 +33,16 @@ const filteredOrders = orders.filter((order: any) => {
 
         <div>
 
-          <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="mb-8 flex justify-end">
 
-            <input
-              type="text"
-              placeholder="🔍 Search by Order ID or Customer..."
-              className="w-full max-w-md rounded-full border border-[#DDD6CC] px-5 py-3 outline-none focus:border-[#B68A35]"
-            />
+  <div className="text-[#7B7468]">
+    Total Orders{" "}
+    <span className="font-semibold text-[#2F4F2F]">
+      {orders.length}
+    </span>
+  </div>
 
-            <div className="text-[#7B7468]">
-              Total Orders{" "}
-              <span className="font-semibold text-[#2F4F2F]">
-                {orders.length}
-              </span>
-            </div>
-
-          </div>
+</div>
 
           <h1 className="font-instrument text-5xl text-[#2F4F2F]">
             Orders
@@ -65,7 +58,7 @@ const filteredOrders = orders.filter((order: any) => {
 
      
       {/* Existing Order Cards */}
-<OrderKPICards orders={orders} />
+
 <div className="mt-8 mb-8 flex gap-3">
 
   <Link
@@ -76,7 +69,7 @@ const filteredOrders = orders.filter((order: any) => {
         : "border border-[#DDD6CC]"
     }`}
   >
-    Active
+    New
   </Link>
 
   <Link
@@ -90,19 +83,9 @@ const filteredOrders = orders.filter((order: any) => {
     Completed
   </Link>
 
-  <Link
-    href="/dashboard/orders?tab=cancelled"
-    className={`rounded-full px-6 py-2 transition ${
-      tab === "cancelled"
-        ? "bg-[#2F4F2F] text-white"
-        : "border border-[#DDD6CC]"
-    }`}
-  >
-    Cancelled
-  </Link>
-
+  
 </div>
-<OrdersToolbar />
+
       <div className="space-y-5">
         {filteredOrders.map((order: any) => (
           <OrderCard

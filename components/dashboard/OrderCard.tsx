@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import UpdateShipDateModal from "@/components/dashboard/UpdateShipDateModal";
 import ShippingModal from "@/components/dashboard/ShippingModal";
 import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
 import { getTrackingUrl } from "@/lib/tracking";
@@ -15,7 +14,6 @@ interface OrderCardProps {
 
 export default function OrderCard({ order }: OrderCardProps) {
 const [showMenu, setShowMenu] = useState(false);
-const [showShipDateModal, setShowShipDateModal] = useState(false);
 const [showShippingModal, setShowShippingModal] = useState(false);
 const [showCompleteModal, setShowCompleteModal] = useState(false);
 const [completing, setCompleting] = useState(false);
@@ -160,22 +158,9 @@ console.log({
   </button>
 
   {showMenu && (
-    <div className="absolute right-0 top-10 z-20 w-48 overflow-hidden rounded-xl border border-[#E8E2D9] bg-white shadow-lg">
+    <div className="absolute right-0 top-10 z-20 w-44 overflow-hidden rounded-xl border border-[#E8E2D9] bg-white shadow-lg">
 
-      <button className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition">
-        👁 View Order
-      </button>
-
-      <button
-  onClick={() => {
-    setShowMenu(false);
-    setShowShipDateModal(true);
-  }}
-  className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition"
->
-  📅 Update Ship Date
-</button>
-
+      
       <button
   onClick={() => {
     setShowMenu(false);
@@ -183,41 +168,10 @@ console.log({
   }}
   className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition"
 >
-  📦 Shipping Details
+  📦 Update Shipping
 </button>
 
-      <p className="mt-2 text-sm text-[#7B7468]">
-  Tracking:
-  <span className="ml-2 font-medium text-[#2F4F2F]">
-    {trackingNumber || "Not Assigned"}
-  </span>
-
-  {trackingNumber && carrier && (
-    <>
-      <br />
-
-      <a
-        href={getTrackingUrl(carrier, trackingNumber)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-2 inline-block text-sm font-medium text-blue-600 hover:underline"
-      >
-        🔗 Track Shipment
-      </a>
-    </>
-  )}
-</p>
-
-      <button
-  onClick={() => {
-    setShowMenu(false);
-    setShowCompleteModal(true);
-  }}
-  className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition"
->
-  🚚 Mark as Shipped
-</button>
-
+      
       <button
   onClick={() => {
     setShowRefundModal(true);
@@ -323,17 +277,14 @@ console.log({
         </Link>
 
       </div>
-<UpdateShipDateModal
-  open={showShipDateModal}
-  onClose={() => setShowShipDateModal(false)}
-  orderId={order.id}
-/>
 
+  
 <ShippingModal
   open={showShippingModal}
   onClose={() => setShowShippingModal(false)}
-  orderId={order.id}
-/>  
+  order={order}
+  onSuccess={() => router.refresh()}
+/>
 <ConfirmationModal
   open={showCompleteModal}
   title="Mark Order as Shipped?"
