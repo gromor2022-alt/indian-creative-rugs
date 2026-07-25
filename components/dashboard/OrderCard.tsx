@@ -6,6 +6,7 @@ import Link from "next/link";
 import UpdateShipDateModal from "@/components/dashboard/UpdateShipDateModal";
 import ShippingModal from "@/components/dashboard/ShippingModal";
 import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
+import { getTrackingUrl } from "@/lib/tracking";
 
 interface OrderCardProps {
   order: any;
@@ -18,6 +19,8 @@ const [showShippingModal, setShowShippingModal] = useState(false);
 const [showCompleteModal, setShowCompleteModal] = useState(false);
 const [completing, setCompleting] = useState(false);
 const router = useRouter();
+const [showCancelModal, setShowCancelModal] = useState(false);
+const [cancelling, setCancelling] = useState(false);
 
 async function markAsShipped() {
 
@@ -26,48 +29,93 @@ async function markAsShipped() {
   try {
 
     const response = await fetch("/api/dashboard/orders/update", {
-
       method: "POST",
-
       headers: {
         "Content-Type": "application/json",
       },
-
       body: JSON.stringify({
         orderId: order.id,
         status: "completed",
       }),
-
     });
 
     const data = await response.json();
 
     if (data.success) {
-
       alert("Order marked as shipped successfully ✅");
-
       setShowCompleteModal(false);
-
       router.refresh();
-
     } else {
-
       alert(data.message);
-
     }
 
   } catch (err) {
-
     console.error(err);
-
     alert("Something went wrong.");
-
   }
 
   setCompleting(false);
 
 }
 
+async function cancelOrder() {
+
+  setCancelling(true);
+
+  try {
+
+    const response = await fetch("/api/dashboard/orders/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        orderId: order.id,
+        status: "cancelled",
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert("Order cancelled successfully ✅");
+      setShowCancelModal(false);
+      router.refresh();
+    } else {
+      alert(data.message);
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong.");
+  }
+
+  setCancelling(false);
+
+}
+
+const carrier =
+  order.meta_data?.find(
+    (meta: any) => meta.key === "_icr_carrier"
+  )?.value || "";
+const trackingNumber =
+  order.meta_data?.find(
+    (meta: any) => meta.key === "_icr_tracking_number"
+  )?.value || "";
+
+const pickupDate =
+  order.meta_data?.find(
+    (meta: any) => meta.key === "_icr_pickup_date"
+  )?.value || "";
+
+const shipDate =
+  order.meta_data?.find(
+    (meta: any) => meta.key === "_icr_ship_date"
+  )?.value || "";
+console.log({
+  carrier,
+  trackingNumber,
+});
   return (
     <div className="rounded-2xl border border-[#E8E2D9] bg-white p-6 transition hover:shadow-md">
 
@@ -108,9 +156,9 @@ async function markAsShipped() {
   </button>
 
   {showMenu && (
-    <div className="absolute right-0 mt-2 w-60 rounded-xl border border-[#E7E1D8] bg-white shadow-xl z-20">
+    <div className="absolute right-0 top-10 z-20 w-48 overflow-hidden rounded-xl border border-[#E8E2D9] bg-white shadow-lg">
 
-      <button className="w-full px-4 py-3 text-left hover:bg-[#F8F6F2]">
+      <button className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition">
         👁 View Order
       </button>
 
@@ -119,12 +167,12 @@ async function markAsShipped() {
     setShowMenu(false);
     setShowShipDateModal(true);
   }}
-  className="w-full px-4 py-3 text-left hover:bg-[#F8F6F2]"
+  className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition"
 >
   📅 Update Ship Date
 </button>
 
-      <button className="w-full px-4 py-3 text-left hover:bg-[#F8F6F2]">
+      <button className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition">
         🚚 Ready for Shipping
       </button>
 
@@ -133,32 +181,56 @@ async function markAsShipped() {
     setShowMenu(false);
     setShowShippingModal(true);
   }}
-  className="w-full px-4 py-3 text-left hover:bg-[#F8F6F2]"
+  className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition"
 >
   📦 Shipping Details
 </button>
 
-      <button className="w-full px-4 py-3 text-left hover:bg-[#F8F6F2]">
-        🔢 Add Tracking Number
-      </button>
+      <p className="mt-2 text-sm text-[#7B7468]">
+  Tracking:
+  <span className="ml-2 font-medium text-[#2F4F2F]">
+    {trackingNumber || "Not Assigned"}
+  </span>
+
+  {trackingNumber && carrier && (
+    <>
+      <br />
+
+      <a
+        href={getTrackingUrl(carrier, trackingNumber)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-2 inline-block text-sm font-medium text-blue-600 hover:underline"
+      >
+        🔗 Track Shipment
+      </a>
+    </>
+  )}
+</p>
 
       <button
   onClick={() => {
     setShowMenu(false);
     setShowCompleteModal(true);
   }}
-  className="w-full px-4 py-3 text-left text-green-700 hover:bg-[#F8F6F2]"
+  className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition"
 >
   🚚 Mark as Shipped
 </button>
 
-      <button className="w-full px-4 py-3 text-left hover:bg-[#FFF5F5] text-orange-600">
+      <button className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-left hover:bg-[#F8F6F2] transition">
         💸 Refund
       </button>
 
-      <button className="w-full px-4 py-3 text-left hover:bg-[#FFF5F5] text-red-600">
-        ❌ Cancel Order
-      </button>
+      <button
+  onClick={() => {
+    setShowMenu(false);
+    setShowCancelModal(true);
+  }}
+  className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-red-600 transition hover:bg-[#F8F6F2]"
+>
+  ❌ Cancel Order
+</button>
 
     </div>
   )}
@@ -264,6 +336,15 @@ async function markAsShipped() {
   onCancel={() => setShowCompleteModal(false)}
   onConfirm={markAsShipped}
   loading={completing}
+/>
+<ConfirmationModal
+  open={showCancelModal}
+  title="Cancel this Order?"
+  message="This action will move the order to the Cancelled tab."
+  confirmText="Yes, Cancel Order"
+  onCancel={() => setShowCancelModal(false)}
+  onConfirm={cancelOrder}
+  loading={cancelling}
 />
   </div>
   );
