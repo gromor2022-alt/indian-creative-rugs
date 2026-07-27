@@ -5,7 +5,7 @@ const collections = [
   {
     name: "Persian",
     image: "/images/persian/rugs1.jpg",
-    slug: "persian",
+    slug: "Persian",
   },
   {
     name: "Vintage",

@@ -7,9 +7,12 @@ export default function StatusBar() {
         <span>
           🚚 SHIP SHIP, HOORAY! Free Shipping on all U.S. orders!
         </span>
+         <span>
+          🚚 No custom fees or extra duties—what you see is what you pay!
+        </span>
 
         <span>
-          ✦ Handmade in Bhadohi, India.
+          ✦ Handmade in India.
         </span>
 
         <span>

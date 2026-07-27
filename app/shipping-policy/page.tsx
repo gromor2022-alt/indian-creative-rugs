@@ -68,8 +68,7 @@ export default function ShippingPolicyPage() {
             </h2>
 
             <p>
-              International customers are responsible for any customs,
-              duties or taxes imposed by their local authorities.
+              No custom fees or extra duties—what you see is what you pay!
             </p>
           </div>
 
