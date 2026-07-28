@@ -23,67 +23,58 @@ export default function Footer() {
             </h3>
 
             <p className="text-[#F8F3EC]/75 leading-8">
-              Luxury handmade rugs crafted in Bhadohi, India since 1980.
+              Luxury handmade rugs crafted in India since 1980.
             </p>
 <div className="flex gap-4 mt-8">
 
   <a
-    href="#"
-    aria-label="Facebook"
-    className="w-11 h-11 rounded-full border border-[#D4AF37]
-    flex items-center justify-center
-    text-[#F8F3EC]
-    transition-all duration-300
-    hover:bg-[#D4AF37]
-    hover:text-[#2F4F2F]
-    hover:-translate-y-1"
-  >
-    <FaFacebookF />
-  </a>
+  href="https://www.facebook.com/indiancreativerugs"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Facebook"
+  className="w-11 h-11 rounded-full border border-[#D4AF37]
+  flex items-center justify-center
+  text-[#F8F3EC]
+  transition-all duration-300
+  hover:bg-[#D4AF37]
+  hover:text-[#2F4F2F]
+  hover:-translate-y-1"
+>
+  <FaFacebookF />
+</a>
 
-  <a
-    href="#"
-    aria-label="Instagram"
-    className="w-11 h-11 rounded-full border border-[#D4AF37]
-    flex items-center justify-center
-    text-[#F8F3EC]
-    transition-all duration-300
-    hover:bg-[#D4AF37]
-    hover:text-[#2F4F2F]
-    hover:-translate-y-1"
-  >
-    <FaInstagram />
-  </a>
+<a
+  href="https://www.instagram.com/indiancreativerugs"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Instagram"
+  className="w-11 h-11 rounded-full border border-[#D4AF37]
+  flex items-center justify-center
+  text-[#F8F3EC]
+  transition-all duration-300
+  hover:bg-[#D4AF37]
+  hover:text-[#2F4F2F]
+  hover:-translate-y-1"
+>
+  <FaInstagram />
+</a>
 
-  <a
-    href="#"
-    aria-label="Pinterest"
-    className="w-11 h-11 rounded-full border border-[#D4AF37]
-    flex items-center justify-center
-    text-[#F8F3EC]
-    transition-all duration-300
-    hover:bg-[#D4AF37]
-    hover:text-[#2F4F2F]
-    hover:-translate-y-1"
-  >
-    <FaPinterestP />
-  </a>
-
-  <a
-    href="#"
-    aria-label="YouTube"
-    className="w-11 h-11 rounded-full border border-[#D4AF37]
-    flex items-center justify-center
-    text-[#F8F3EC]
-    transition-all duration-300
-    hover:bg-[#D4AF37]
-    hover:text-[#2F4F2F]
-    hover:-translate-y-1"
-  >
-    <FaYoutube />
-  </a>
-
-  <a
+<a
+  href="https://www.pinterest.com/indiancreativerugs"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Pinterest"
+  className="w-11 h-11 rounded-full border border-[#D4AF37]
+  flex items-center justify-center
+  text-[#F8F3EC]
+  transition-all duration-300
+  hover:bg-[#D4AF37]
+  hover:text-[#2F4F2F]
+  hover:-translate-y-1"
+>
+  <FaPinterestP />
+</a>
+    <a
     href="https://wa.me/919984109883"
     target="_blank"
     rel="noopener noreferrer"
@@ -124,11 +115,7 @@ export default function Footer() {
                 <Link href="/ready-to-ship">Ready To Ship</Link>
               </li>
 
-              <li>
-                <Link href="/custom-rugs">Custom Rugs</Link>
-              </li>
-
-            </ul>
+              </ul>
 
           </div>
 
