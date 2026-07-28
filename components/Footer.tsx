@@ -192,7 +192,7 @@ export default function Footer() {
     </p>
 
     <p className="text-sm text-[#D8D2C8]">
-      Crafted with Pride in Bhadohi, India 🇮🇳
+      Crafted with Pride in India 🇮🇳
     </p>
 
     <p className="text-sm text-[#D8D2C8]">
