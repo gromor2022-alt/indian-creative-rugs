@@ -27,9 +27,9 @@ const collectionProducts = allProducts.filter(
 
       <div className="max-w-7xl mx-auto px-8 py-16">
 
-        <h1 className="font-instrument text-[64px] text-[#22304A] text-center mb-4">
-          {collection.replace(/-/g, " ")}
-        </h1>
+        <h1 className="font-instrument text-[64px] text-[#22304A] text-center mb-4 capitalize">
+  {collection.replace(/-/g, " ")}
+</h1>
 
         <p className="text-center text-gray-600 mb-16">
           Explore our handcrafted luxury rug collection.
