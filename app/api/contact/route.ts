@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { prisma } from "@/lib/prisma";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -77,19 +78,29 @@ export async function POST(req: Request) {
         </p>
       `,
     });
-
+// Save enquiry to database
+console.log("Saving enquiry to database...");
+await prisma.enquiry.create({
+  data: {
+    name,
+    email,
+    phone: phone || null,
+    message,
+  },
+});
+console.log("Enquiry saved successfully");
     return NextResponse.json({
       success: true,
     });
-  } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Unable to send email.",
-      },
-      { status: 500 }
-    );
-  }
+  } 
+catch (error) {
+  console.error(error);
+  return NextResponse.json(
+    {
+      success: false,
+      message: "Something went wrong",
+    },
+    { status: 500 }
+  );
+}
 }
