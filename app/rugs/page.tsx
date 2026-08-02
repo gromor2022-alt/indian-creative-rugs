@@ -1,10 +1,13 @@
+
+import { Heart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { getProducts } from "@/lib/getProducts";
 
 export default async function RugsPage() {
   const products = await getProducts();
-  
+ 
+
 
   return (
     <main className="bg-[#F7EADF] min-h-screen">
@@ -63,17 +66,24 @@ export default async function RugsPage() {
               href={`/rugs/${product.slug}`}
               className="group"
             >
-              <div className="overflow-hidden">
+              <div className="relative overflow-hidden">
 
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  width={500}
-                  height={700}
-                  className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition duration-700"
-                />
+  <div className="absolute right-3 top-3 z-10 rounded-full bg-white/80 backdrop-blur-md p-2 shadow-lg transition-all duration-300 hover:scale-110 hover:bg-white cursor-pointer">
+  <Heart
+    size={20}
+    className="text-gray-500 transition-colors duration-300 hover:text-red-500"
+  />
+</div>
 
-              </div>
+  <Image
+    src={product.image}
+    alt={product.name}
+    width={500}
+    height={700}
+    className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition duration-700"
+  />
+
+</div>
 
               <h3 className="font-instrument text-3xl text-[#22304A] mt-5">
                 {product.name}
