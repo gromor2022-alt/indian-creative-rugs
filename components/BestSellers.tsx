@@ -1,5 +1,5 @@
 "use client";
-
+import FavoriteButton from "@/components/FavoriteButton";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -76,7 +76,9 @@ export default function BestSellers({ products }: Props) {
   className="group block transition-all duration-500"
 >
               
-                <div className="overflow-hidden rounded-[28px] bg-[#FCF8F2] shadow-sm transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl">
+                <div className="relative overflow-hidden rounded-[28px] bg-[#FCF8F2] shadow-sm transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl">
+
+  <FavoriteButton />
                   <Image
                     src={rug.images?.[0]?.src || "/placeholder.jpg"}
                     alt={rug.name}

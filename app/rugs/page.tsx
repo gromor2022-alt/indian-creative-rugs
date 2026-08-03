@@ -1,5 +1,5 @@
 
-import { Heart } from "lucide-react";
+import FavoriteButton from "@/components/FavoriteButton";
 import Link from "next/link";
 import Image from "next/image";
 import { getProducts } from "@/lib/getProducts";
@@ -68,12 +68,7 @@ export default async function RugsPage() {
             >
               <div className="relative overflow-hidden">
 
-  <div className="absolute right-3 top-3 z-10 rounded-full bg-white/80 backdrop-blur-md p-2 shadow-lg transition-all duration-300 hover:scale-110 hover:bg-white cursor-pointer">
-  <Heart
-    size={20}
-    className="text-gray-500 transition-colors duration-300 hover:text-red-500"
-  />
-</div>
+  <FavoriteButton />
 
   <Image
     src={product.image}
