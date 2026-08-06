@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import WooCommerce from "@/lib/woocommerce";
+import { getProductMap } from "@/lib/product-repository";
+import { transformOrder } from "@/lib/order-transformer";
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,7 +14,7 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // Find the WooCommerce customer
+    // Fetch customer
     const customerResponse = await WooCommerce.get("customers", {
       email,
     });
@@ -26,17 +28,23 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // Get orders for this customer
-    const ordersResponse = await WooCommerce.get("orders", {
-      customer: customer.id,
-      per_page: 100,
-    });
+    // Fetch orders & products in parallel
+    const [ordersResponse, productMap] = await Promise.all([
+      WooCommerce.get("orders", {
+        customer: customer.id,
+        per_page: 100,
+      }),
+      getProductMap(),
+    ]);
+
+    const orders = ordersResponse.data.map((order: any) =>
+      transformOrder(order, productMap)
+    );
 
     return NextResponse.json({
       success: true,
-      orders: ordersResponse.data,
+      orders,
     });
-
   } catch (error: any) {
     console.error(error);
 

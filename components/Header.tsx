@@ -67,11 +67,16 @@ export default function Header() {
   Ready To Ship
 </Link>
 
-  {false && (
-  <Link href="/account">
-    <User size={22} />
-  </Link>
-)}
+  <Link
+  href="/account"
+  className="relative inline-flex items-center justify-center whitespace-nowrap hover:text-[#B68A35] transition-colors duration-300"
+  aria-label="My Account"
+>
+  <User
+    className="transition-all duration-300 hover:text-[#B68A35]"
+    size={22}
+  />
+</Link>
 
 <Link
   href="/cart"
