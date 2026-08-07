@@ -34,3 +34,13 @@ model playing_with_neon {
   name  String
   value Float? @db.Real
 }
+model Favorite {
+  id         Int      @id @default(autoincrement())
+
+  email      String
+  productId  Int
+
+  createdAt  DateTime @default(now())
+
+  @@unique([email, productId])
+}

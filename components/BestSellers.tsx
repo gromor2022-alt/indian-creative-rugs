@@ -78,7 +78,7 @@ export default function BestSellers({ products }: Props) {
               
                 <div className="relative overflow-hidden rounded-[28px] bg-[#FCF8F2] shadow-sm transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl">
 
-  <FavoriteButton />
+  <FavoriteButton productId={rug.id} />
                   <Image
                     src={rug.images?.[0]?.src || "/placeholder.jpg"}
                     alt={rug.name}

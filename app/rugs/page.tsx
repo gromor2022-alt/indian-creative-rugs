@@ -68,7 +68,7 @@ export default async function RugsPage() {
             >
               <div className="relative overflow-hidden">
 
-  <FavoriteButton />
+  <FavoriteButton productId={product.id} />
 
   <Image
     src={product.image}
