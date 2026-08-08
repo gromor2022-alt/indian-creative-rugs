@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ShippingModal from "@/components/dashboard/ShippingModal";
 import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
+import CompleteOrderModal from "@/components/dashboard/CompleteOrderModal";
 import RefundModal from "@/components/dashboard/RefundModal";
 
 interface OrderCardProps {
@@ -80,7 +81,6 @@ export default function OrderCard({ order }: OrderCardProps) {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showRefundModal, setShowRefundModal] = useState(false);
 
-  const [completing, setCompleting] = useState(false);
   const [cancelling, setCancelling] = useState(false);
 
   const router = useRouter();
@@ -105,43 +105,6 @@ export default function OrderCard({ order }: OrderCardProps) {
   const shippingAddress = getShippingAddress(order);
 
   const items = order.line_items || [];
-
-  async function markAsCompleted() {
-    setCompleting(true);
-
-    try {
-      const response = await fetch(
-        "/api/dashboard/orders/update",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            orderId: order.id,
-            status: "completed",
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (data.success) {
-        alert("Order completed successfully ✅");
-        setShowCompleteModal(false);
-        setShowMenu(false);
-
-        router.refresh();
-      } else {
-        alert(data.message || "Failed to complete order.");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong.");
-    } finally {
-      setCompleting(false);
-    }
-  }
 
   async function cancelOrder() {
     setCancelling(true);
@@ -182,25 +145,25 @@ export default function OrderCard({ order }: OrderCardProps) {
 
   return (
     <>
-      <div className="rounded-2xl border border-[#E8E2D9] bg-white p-4 sm:p-6 shadow-sm transition hover:shadow-md">
+      <div className="min-w-0 overflow-hidden rounded-2xl border border-[#E8E2D9] bg-white p-4 shadow-sm transition hover:shadow-md sm:p-5">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <h3 className="text-lg sm:text-xl font-semibold text-[#2F4F2F]">
+            <h3 className="break-words text-base font-semibold text-[#2F4F2F] sm:text-lg">
               Order #{order.id}
             </h3>
 
-            <p className="mt-2 font-medium text-[#7B7468]">
+            <p className="mt-1 text-sm font-medium text-[#7B7468]">
               {order.billing?.first_name}{" "}
               {order.billing?.last_name}
             </p>
 
-            <div className="mt-3 flex flex-wrap gap-2">
-              <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-medium text-blue-700">
                 🇺🇸 {order.billing?.country || "USA"}
               </span>
 
-              <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
+              <span className="rounded-full bg-green-50 px-2.5 py-1 text-[11px] font-medium text-green-700">
                 Online Order
               </span>
             </div>
@@ -263,9 +226,9 @@ export default function OrderCard({ order }: OrderCardProps) {
         </div>
 
         {/* Status */}
-        <div className="mt-5">
+        <div className="mt-3">
           <span
-            className={`inline-flex rounded-full px-4 py-2 text-sm font-medium ${
+            className={`inline-flex rounded-full px-3 py-1.5 text-xs font-medium ${
               order.status === "completed"
                 ? "bg-green-100 text-green-700"
                 : order.status === "processing"
@@ -282,7 +245,7 @@ export default function OrderCard({ order }: OrderCardProps) {
         </div>
 
         {/* Products */}
-        <div className="mt-6 space-y-4">
+        <div className="mt-4 space-y-3">
           {items.map((item: any) => {
             const size = getMetaValue(item, [
               "Size",
@@ -306,15 +269,15 @@ export default function OrderCard({ order }: OrderCardProps) {
             return (
               <div
                 key={item.id}
-                className="flex flex-col gap-4 rounded-2xl border border-[#EEE6DA] bg-[#FCFBF8] p-4 sm:flex-row"
+                className="flex min-w-0 flex-col gap-3 rounded-xl border border-[#EEE6DA] bg-[#FCFBF8] p-3 sm:flex-row"
               >
                 {/* Image */}
-                <div className="h-48 w-full shrink-0 overflow-hidden rounded-xl bg-[#F3F0EA] sm:h-32 sm:w-32">
+                <div className="flex h-44 w-full shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#F3F0EA] p-2 sm:h-32 sm:w-32">
                   {image ? (
                     <img
                       src={image}
                       alt={item.name || "Rug"}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-contain"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-sm text-[#9A9387]">
@@ -325,11 +288,11 @@ export default function OrderCard({ order }: OrderCardProps) {
 
                 {/* Product info */}
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-base sm:text-lg font-semibold text-[#2F4F2F]">
+                  <h4 className="break-words text-sm font-semibold text-[#2F4F2F] sm:text-base">
                     {item.name}
                   </h4>
 
-                  <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                  <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs sm:text-sm">
                     <p className="text-[#7B7468]">
                       Size:
                       <span className="ml-1 font-medium text-[#2F4F2F]">
@@ -365,17 +328,17 @@ export default function OrderCard({ order }: OrderCardProps) {
         </div>
 
         {/* Order information */}
-        <div className="mt-6 grid gap-5 border-t border-[#EEE6DA] pt-6 lg:grid-cols-2">
+        <div className="mt-4 grid gap-4 border-t border-[#EEE6DA] pt-4 lg:grid-cols-2">
           <div>
             <p className="text-sm text-[#9A9387]">
               Order Value
             </p>
 
-            <p className="mt-1 text-2xl font-bold text-[#2F4F2F]">
+            <p className="mt-1 text-xl font-bold text-[#2F4F2F] sm:text-2xl">
               ${order.total}
             </p>
 
-            <div className="mt-4 space-y-2 text-sm">
+            <div className="mt-3 space-y-1.5 text-xs sm:text-sm">
               <p className="text-[#7B7468]">
                 Expected Ship Date:
                 <span className="ml-2 font-medium text-[#2F4F2F]">
@@ -414,7 +377,7 @@ export default function OrderCard({ order }: OrderCardProps) {
               Shipping Address
             </p>
 
-            <div className="mt-2 text-sm leading-6 text-[#2F4F2F]">
+            <div className="mt-1 break-words text-xs leading-5 text-[#2F4F2F] sm:text-sm">
               {shippingAddress.length > 0 ? (
                 shippingAddress.map(
                   (line: string, index: number) => (
@@ -433,10 +396,10 @@ export default function OrderCard({ order }: OrderCardProps) {
         </div>
 
         {/* Footer */}
-        <div className="mt-6 flex justify-end border-t border-[#EEE6DA] pt-5">
+        <div className="mt-4 flex justify-end border-t border-[#EEE6DA] pt-4">
           <Link
             href={`/dashboard/orders/${order.id}`}
-            className="w-full rounded-full bg-[#556B2F] px-5 py-2.5 text-center text-sm font-medium text-white transition hover:bg-[#B68A35] sm:w-auto"
+            className="w-full rounded-full bg-[#556B2F] px-4 py-2 text-center text-xs font-semibold text-white transition hover:bg-[#B68A35] sm:w-auto sm:text-sm"
           >
             View Details →
           </Link>
@@ -450,14 +413,11 @@ export default function OrderCard({ order }: OrderCardProps) {
         onSuccess={() => router.refresh()}
       />
 
-      <ConfirmationModal
+      <CompleteOrderModal
         open={showCompleteModal}
-        title="Complete this Order?"
-        message="This will move the order from New to Completed. Continue?"
-        confirmText="Yes, Complete Order"
-        onCancel={() => setShowCompleteModal(false)}
-        onConfirm={markAsCompleted}
-        loading={completing}
+        order={order}
+        onClose={() => setShowCompleteModal(false)}
+        onSuccess={() => router.refresh()}
       />
 
       <ConfirmationModal

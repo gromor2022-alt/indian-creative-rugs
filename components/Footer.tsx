@@ -3,219 +3,118 @@ import {
   FaFacebookF,
   FaInstagram,
   FaPinterestP,
-  FaYoutube,
   FaWhatsapp,
 } from "react-icons/fa";
 
+const payments = ["PayPal", "VISA", "Mastercard", "DISCOVER", "Apple Pay", "Klarna"];
+
 export default function Footer() {
   return (
-    <footer className="bg-[#2F4F2F] border-t border-[#D9D1C7] mt-16 md:mt-24">
-
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-12 md:py-16">
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-16">
-
-          {/* Brand */}
-
+    <footer className="mt-12 border-t border-[#D9D1C7] bg-[#2F4F2F] md:mt-16">
+      <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           <div>
-            <h3 className="font-instrument text-3xl md:text-4xl text-[#F8F3EC] mb-5 md:mb-6">
+            <h3 className="font-instrument text-2xl text-[#F8F3EC] sm:text-3xl">
               Indian Creative Rugs
             </h3>
-
-            <p className="text-[#F8F3EC]/75 leading-8">
+            <p className="mt-3 max-w-sm text-sm leading-6 text-[#F8F3EC]/75">
               Luxury handmade rugs crafted in India since 1980.
             </p>
-<div className="flex gap-4 mt-8">
 
-  <a
-  href="https://www.facebook.com/indiancreativerugs"
-  target="_blank"
-  rel="noopener noreferrer"
-  aria-label="Facebook"
-  className="w-11 h-11 rounded-full border border-[#D4AF37]
-  flex items-center justify-center
-  text-[#F8F3EC]
-  transition-all duration-300
-  hover:bg-[#D4AF37]
-  hover:text-[#2F4F2F]
-  hover:-translate-y-1"
->
-  <FaFacebookF />
-</a>
-
-<a
-  href="https://www.instagram.com/indiancreativerugs"
-  target="_blank"
-  rel="noopener noreferrer"
-  aria-label="Instagram"
-  className="w-11 h-11 rounded-full border border-[#D4AF37]
-  flex items-center justify-center
-  text-[#F8F3EC]
-  transition-all duration-300
-  hover:bg-[#D4AF37]
-  hover:text-[#2F4F2F]
-  hover:-translate-y-1"
->
-  <FaInstagram />
-</a>
-
-<a
-  href="https://www.pinterest.com/indiancreativerugs"
-  target="_blank"
-  rel="noopener noreferrer"
-  aria-label="Pinterest"
-  className="w-11 h-11 rounded-full border border-[#D4AF37]
-  flex items-center justify-center
-  text-[#F8F3EC]
-  transition-all duration-300
-  hover:bg-[#D4AF37]
-  hover:text-[#2F4F2F]
-  hover:-translate-y-1"
->
-  <FaPinterestP />
-</a>
-    <a
-    href="https://wa.me/919984109883"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="WhatsApp"
-    className="w-11 h-11 rounded-full border border-[#D4AF37]
-    flex items-center justify-center
-    text-[#F8F3EC]
-    transition-all duration-300
-    hover:bg-[#D4AF37]
-    hover:text-[#2F4F2F]
-    hover:-translate-y-1"
-  >
-    <FaWhatsapp />
-  </a>
-
-</div>
+            <div className="mt-6 flex gap-2.5">
+              <a href="https://www.facebook.com/indiancreativerugs" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#D4AF37] text-sm text-[#F8F3EC] transition hover:bg-[#D4AF37] hover:text-[#2F4F2F]">
+                <FaFacebookF />
+              </a>
+              <a href="https://www.instagram.com/indiancreativerugs" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#D4AF37] text-sm text-[#F8F3EC] transition hover:bg-[#D4AF37] hover:text-[#2F4F2F]">
+                <FaInstagram />
+              </a>
+              <a href="https://www.pinterest.com/indiancreativerugs" target="_blank" rel="noopener noreferrer" aria-label="Pinterest" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#D4AF37] text-sm text-[#F8F3EC] transition hover:bg-[#D4AF37] hover:text-[#2F4F2F]">
+                <FaPinterestP />
+              </a>
+              <a href="https://wa.me/919984109883" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#D4AF37] text-sm text-[#F8F3EC] transition hover:bg-[#D4AF37] hover:text-[#2F4F2F]">
+                <FaWhatsapp />
+              </a>
+            </div>
           </div>
 
-          {/* Shop */}
-
           <div>
-
-            <h4 className="uppercase tracking-[3px] text-sm text-[#F8F3EC] mb-6">
+            <h4 className="text-xs font-semibold uppercase tracking-[2px] text-[#F8F3EC]">
               Shop
             </h4>
-
-            <ul className="space-y-3 text-[#F8F3EC]/80">
-
-              <li>
-                <Link href="/rugs">All Rugs</Link>
-              </li>
-
-              <li>
-                <Link href="/collections">Collections</Link>
-              </li>
-
-              <li>
-                <Link href="/ready-to-ship">Ready To Ship</Link>
-              </li>
-
-              </ul>
-
+            <ul className="mt-4 space-y-2 text-sm text-[#F8F3EC]/80">
+              <li><Link href="/rugs">All Rugs</Link></li>
+              <li><Link href="/collections">Collections</Link></li>
+              <li><Link href="/ready-to-ship">Ready To Ship</Link></li>
+            </ul>
           </div>
 
-          {/* Company */}
-
           <div>
-
-            <h4 className="uppercase tracking-[3px] text-sm text-[#F8F3EC] mb-6">
+            <h4 className="text-xs font-semibold uppercase tracking-[2px] text-[#F8F3EC]">
               Company
             </h4>
-
-            <ul className="space-y-3 text-[#F8F3EC]/80">
-
-              <li>
-                <Link href="/about">About Us</Link>
-              </li>
-
-              <li>
-                <Link href="/trade-program">Trade Program</Link>
-              </li>
-
-              <li>
-                <Link href="/contact">Contact</Link>
-              </li>
-
-              <li>
-                <Link href="/faq">FAQ</Link>
-              </li>
-
+            <ul className="mt-4 space-y-2 text-sm text-[#F8F3EC]/80">
+              <li><Link href="/about">About Us</Link></li>
+              <li><Link href="/trade-program">Trade Program</Link></li>
+              <li><Link href="/contact">Contact</Link></li>
+              <li><Link href="/faq">FAQ</Link></li>
             </ul>
-
           </div>
-
-          {/* Policies */}
 
           <div>
-
-            <h4 className="uppercase tracking-[3px] text-sm text-[#F8F3EC] mb-6">
+            <h4 className="text-xs font-semibold uppercase tracking-[2px] text-[#F8F3EC]">
               Policies
             </h4>
-
-            <ul className="space-y-3 text-[#F8F3EC]/80">
-
-              <li>
-                <Link href="/shipping-policy">
-                  Shipping Policy
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/returns-policy">
-                  Returns Policy
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/privacy-policy">
-                  Privacy Policy
-                </Link>
-              </li>
-
+            <ul className="mt-4 space-y-2 text-sm text-[#F8F3EC]/80">
+              <li><Link href="/shipping-policy">Shipping Policy</Link></li>
+              <li><Link href="/returns-policy">Returns Policy</Link></li>
+              <li><Link href="/privacy-policy">Privacy Policy</Link></li>
             </ul>
-
           </div>
-
         </div>
 
-        <div className="mt-16 border-t border-[#4D694D] pt-8">
+        {/* Payment methods */}
+        <div className="mt-9 border-t border-[#4D694D] pt-7">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[1.8px] text-[#D8D2C8]">
+                Secure Payment Options
+              </p>
+              <p className="mt-1 text-xs text-[#F8F3EC]/60">
+                Payments are securely processed at checkout.
+              </p>
+            </div>
 
-  <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-12 text-center">
-  
-    <p className="text-sm text-[#D8D2C8]">
-      © {new Date().getFullYear()} Indian Creative Rugs. All Rights Reserved.
-    </p>
+            <div className="flex flex-wrap items-center gap-2">
+              {payments.map((payment) => (
+                <span
+                  key={payment}
+                  className="inline-flex h-8 items-center justify-center rounded-md border border-[#D8D2C8]/30 bg-white px-2.5 text-[10px] font-bold text-[#2F4F2F] shadow-sm"
+                >
+                  {payment}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
 
-    <p className="text-sm text-[#D8D2C8]">
-      Crafted with Pride in India 🇮🇳
-    </p>
-
-    <p className="text-sm text-[#D8D2C8]">
-
-      Designed &amp; Powered by{" "}
-
-      <a
-        href="https://www.affinexa.net"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="font-semibold text-[#D4AF37] transition-all duration-300 hover:text-white hover:underline"
-      >
-        AffiNexa AI Automations
-      </a>
-
-    </p>
-
-  </div>
-</div>
-</div>
-
+        <div className="mt-7 border-t border-[#4D694D] pt-6">
+          <div className="flex flex-col items-center justify-center gap-2 text-center text-xs text-[#D8D2C8] lg:flex-row lg:gap-8">
+            <p>© {new Date().getFullYear()} Indian Creative Rugs. All Rights Reserved.</p>
+            <p>Crafted with Pride in India 🇮🇳</p>
+            <p>
+              Designed &amp; Powered by{" "}
+              <a
+                href="https://www.affinexa.net"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-[#D4AF37] hover:text-white hover:underline"
+              >
+                AffiNexa AI Automations
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
     </footer>
-   
   );
 }
-

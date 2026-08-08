@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
-interface ShippingModalProps {
+interface CompleteOrderModalProps {
   open: boolean;
-  onClose: () => void;
   order: any;
+  onClose: () => void;
   onSuccess: () => void;
 }
 
@@ -15,66 +15,31 @@ function getMeta(order: any, key: string) {
   );
 }
 
-function formatDate(dateString: string) {
-  if (!dateString) return "Not available";
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return dateString;
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-function addDays(dateString: string, days: number) {
-  const date = new Date(dateString);
-  date.setDate(date.getDate() + days);
-  return date.toISOString().split("T")[0];
-}
-
-export default function ShippingModal({
+export default function CompleteOrderModal({
   open,
-  onClose,
   order,
+  onClose,
   onSuccess,
-}: ShippingModalProps) {
-  const originalShipDate = getMeta(order, "_icr_ship_date") ||
-    (order?.date_created ? addDays(order.date_created, 35) : "");
-
-  const [shipDate, setShipDate] = useState(originalShipDate);
+}: CompleteOrderModalProps) {
+  const [pickupDate, setPickupDate] = useState("");
+  const [carrier, setCarrier] = useState("");
+  const [trackingNumber, setTrackingNumber] = useState("");
   const [buyerNote, setBuyerNote] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!order) return;
 
-    const savedShipDate = getMeta(order, "_icr_ship_date");
-    const fallback = order.date_created
-      ? addDays(order.date_created, 35)
-      : "";
-
-    setShipDate(savedShipDate || fallback);
+    setPickupDate(getMeta(order, "_icr_pickup_date"));
+    setCarrier(getMeta(order, "_icr_carrier"));
+    setTrackingNumber(getMeta(order, "_icr_tracking_number"));
     setBuyerNote(
       getMeta(order, "_icr_buyer_note") ||
-        "Order update: Your order is progressing toward shipment."
+        "Your order is ready and will be moving toward shipment shortly."
     );
   }, [order]);
 
-  const dateOptions = useMemo(() => {
-    if (!originalShipDate) return [];
-
-    return Array.from({ length: 21 }, (_, index) => {
-      const days = index + 1;
-      const value = addDays(originalShipDate, days);
-      return {
-        days,
-        value,
-        label: `+${days} ${days === 1 ? "day" : "days"} — ${formatDate(value)}`,
-      };
-    });
-  }, [originalShipDate]);
-
-  async function updateShipping() {
+  async function completeOrder() {
     setLoading(true);
 
     try {
@@ -83,7 +48,10 @@ export default function ShippingModal({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           orderId: order.id,
-          shipDate,
+          status: "completed",
+          carrier,
+          trackingNumber,
+          pickupDate,
           buyerNote,
         }),
       });
@@ -91,11 +59,11 @@ export default function ShippingModal({
       const data = await response.json();
 
       if (!data.success) {
-        alert(data.message || "Failed to update shipping.");
+        alert(data.message || "Failed to complete order.");
         return;
       }
 
-      alert("Shipping update saved successfully ✅");
+      alert("Order completed successfully ✅");
       onClose();
       onSuccess();
     } catch (error) {
@@ -117,7 +85,7 @@ export default function ShippingModal({
               Order #{order.id}
             </p>
             <h2 className="mt-1 font-instrument text-2xl text-[#2F4F2F] sm:text-3xl">
-              Update Shipping
+              Complete Order
             </h2>
           </div>
 
@@ -132,29 +100,55 @@ export default function ShippingModal({
         </div>
 
         <div className="space-y-5 p-5 sm:p-6">
-          <p className="text-sm leading-6 text-[#6F685E]">
-            Update the dispatch date and the message that will be saved with this order.
-          </p>
+          <div className="rounded-xl bg-[#F8F6F2] p-4">
+            <p className="text-xs font-semibold uppercase tracking-[1.5px] text-[#9A9387]">
+              Expected Shipping
+            </p>
+            <p className="mt-1 text-sm font-semibold text-[#2F4F2F]">
+              Already shown on the order card — no need to change it here.
+            </p>
+          </div>
 
           <div>
             <label className="mb-2 block text-xs font-semibold uppercase tracking-[1px] text-[#6F685E]">
-              New Dispatch By Date
+              Pickup Date
+            </label>
+            <input
+              type="date"
+              value={pickupDate}
+              onChange={(e) => setPickupDate(e.target.value)}
+              className="w-full rounded-xl border border-[#DCD5CB] px-3 py-2.5 text-sm text-[#2F4F2F] outline-none focus:border-[#556B2F]"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-[1px] text-[#6F685E]">
+              Shipping Carrier
             </label>
             <select
-              value={shipDate}
-              onChange={(e) => setShipDate(e.target.value)}
-              className="w-full rounded-xl border border-[#DCD5CB] bg-white px-3 py-3 text-sm text-[#2F4F2F] outline-none focus:border-[#556B2F]"
+              value={carrier}
+              onChange={(e) => setCarrier(e.target.value)}
+              className="w-full rounded-xl border border-[#DCD5CB] bg-white px-3 py-2.5 text-sm text-[#2F4F2F] outline-none focus:border-[#556B2F]"
             >
-              {dateOptions.length === 0 ? (
-                <option value="">Select date</option>
-              ) : (
-                dateOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))
-              )}
+              <option value="">Select Carrier</option>
+              <option value="FedEx">FedEx</option>
+              <option value="DHL Express">DHL Express</option>
+              <option value="UPS">UPS</option>
+              <option value="USPS">USPS</option>
             </select>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-[1px] text-[#6F685E]">
+              Tracking Number
+            </label>
+            <input
+              type="text"
+              value={trackingNumber}
+              onChange={(e) => setTrackingNumber(e.target.value)}
+              placeholder="Enter tracking number"
+              className="w-full rounded-xl border border-[#DCD5CB] px-3 py-2.5 text-sm text-[#2F4F2F] outline-none focus:border-[#556B2F]"
+            />
           </div>
 
           <div>
@@ -163,7 +157,7 @@ export default function ShippingModal({
                 Note to Buyer
               </label>
               <span className="rounded-full bg-[#EEE9DE] px-2.5 py-1 text-[11px] font-medium text-[#6F685E]">
-                Pre-filled
+                Editable
               </span>
             </div>
             <textarea
@@ -174,13 +168,8 @@ export default function ShippingModal({
             />
           </div>
 
-          <div className="rounded-xl bg-[#F8F6F2] p-4">
-            <p className="text-xs font-semibold uppercase tracking-[1px] text-[#9A9387]">
-              Original Estimated Shipping
-            </p>
-            <p className="mt-1 text-sm font-semibold text-[#2F4F2F]">
-              {formatDate(originalShipDate)}
-            </p>
+          <div className="rounded-xl border border-[#E8E2D9] bg-[#FCFBF8] p-4 text-xs leading-5 text-[#7B7468]">
+            Completing this order moves it from <strong>NEW</strong> to <strong>COMPLETED</strong> and saves the shipping/tracking information above.
           </div>
         </div>
 
@@ -194,11 +183,11 @@ export default function ShippingModal({
           </button>
           <button
             type="button"
-            onClick={updateShipping}
-            disabled={loading || !shipDate}
+            onClick={completeOrder}
+            disabled={loading}
             className="rounded-xl bg-[#556B2F] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#465823] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "Updating..." : "Update & Save Buyer Message"}
+            {loading ? "Completing..." : "Complete Order"}
           </button>
         </div>
       </div>

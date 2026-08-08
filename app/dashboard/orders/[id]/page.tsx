@@ -88,21 +88,21 @@ export default async function OrderDetailsPage({
     )?.value || "";
 
   return (
-    <div className="min-h-screen bg-[#F8F6F2] p-4 sm:p-6 lg:p-10">
+    <div className="min-h-screen bg-[#F8F6F2] p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-instrument text-3xl sm:text-5xl text-[#2F4F2F]">
+          <h1 className="font-instrument text-3xl sm:text-4xl text-[#2F4F2F]">
             Order #{order.id}
           </h1>
 
-          <p className="mt-3 text-[#7B7468]">
+          <p className="mt-1.5 text-sm text-[#7B7468]">
             Order Details
           </p>
         </div>
 
         <span
-          className={`w-fit rounded-full px-5 py-2 text-sm font-medium ${
+          className={`w-fit rounded-full px-3 py-1.5 text-xs font-medium ${
             order.status === "completed"
               ? "bg-green-100 text-green-700"
               : order.status === "processing"
@@ -117,14 +117,14 @@ export default async function OrderDetailsPage({
       </div>
 
       {/* Customer + Order Summary */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {/* Customer */}
-        <div className="rounded-[24px] bg-white p-6 sm:p-8 shadow-sm">
-          <h2 className="font-instrument text-2xl sm:text-3xl text-[#2F4F2F] mb-6">
+        <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6 shadow-sm">
+          <h2 className="font-instrument text-xl sm:text-2xl text-[#2F4F2F] mb-4">
             Customer
           </h2>
 
-          <div className="space-y-3 text-sm sm:text-base">
+          <div className="space-y-2.5 text-sm">
             <p>
               <strong>Name:</strong>{" "}
               {order.billing?.first_name}{" "}
@@ -149,12 +149,12 @@ export default async function OrderDetailsPage({
         </div>
 
         {/* Order Summary */}
-        <div className="rounded-[24px] bg-white p-6 sm:p-8 shadow-sm">
-          <h2 className="font-instrument text-2xl sm:text-3xl text-[#2F4F2F] mb-6">
+        <div className="rounded-2xl bg-white p-5 shadow-sm sm:p-6 shadow-sm">
+          <h2 className="font-instrument text-xl sm:text-2xl text-[#2F4F2F] mb-4">
             Order Summary
           </h2>
 
-          <div className="space-y-3 text-sm sm:text-base">
+          <div className="space-y-2.5 text-sm">
             <p>
               <strong>Total:</strong> ${order.total}
             </p>
@@ -190,12 +190,12 @@ export default async function OrderDetailsPage({
       </div>
 
       {/* Shipping Address */}
-      <div className="mt-6 rounded-[24px] bg-white p-6 sm:p-8 shadow-sm">
-        <h2 className="font-instrument text-2xl sm:text-3xl text-[#2F4F2F] mb-5">
+      <div className="mt-6 rounded-2xl bg-white p-5 shadow-sm sm:p-6 shadow-sm">
+        <h2 className="font-instrument text-xl sm:text-2xl text-[#2F4F2F] mb-5">
           Shipping Address
         </h2>
 
-        <div className="text-sm sm:text-base leading-7 text-[#2F4F2F]">
+        <div className="text-sm sm:text-base leading-6 text-[#2F4F2F]">
           {shippingAddress.length > 0 ? (
             shippingAddress.map(
               (line: string, index: number) => (
@@ -213,12 +213,12 @@ export default async function OrderDetailsPage({
       </div>
 
       {/* Products */}
-      <div className="mt-6 rounded-[24px] bg-white p-6 sm:p-8 shadow-sm">
-        <h2 className="font-instrument text-2xl sm:text-3xl text-[#2F4F2F] mb-6">
+      <div className="mt-6 rounded-2xl bg-white p-5 shadow-sm sm:p-6 shadow-sm">
+        <h2 className="font-instrument text-xl sm:text-2xl text-[#2F4F2F] mb-4">
           Products Ordered
         </h2>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {order.line_items?.map((item: any) => {
             const size = getMetaValue(item, [
               "Size",
@@ -242,15 +242,15 @@ export default async function OrderDetailsPage({
             return (
               <div
                 key={item.id}
-                className="flex flex-col gap-5 rounded-2xl border border-[#EEE6DA] bg-[#FCFBF8] p-4 sm:flex-row sm:items-center"
+                className="flex flex-col gap-4 rounded-xl border border-[#EEE6DA] bg-[#FCFBF8] p-4 sm:flex-row sm:items-center"
               >
                 {/* Image */}
-                <div className="h-56 w-full shrink-0 overflow-hidden rounded-xl bg-[#F3F0EA] sm:h-32 sm:w-32">
+                <div className="flex h-44 w-full shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#F3F0EA] p-2 sm:h-32 sm:w-32">
                   {image ? (
                     <img
                       src={image}
                       alt={item.name || "Rug"}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-contain"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center text-sm text-[#9A9387]">
@@ -261,11 +261,11 @@ export default async function OrderDetailsPage({
 
                 {/* Details */}
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-lg text-[#2F4F2F]">
+                  <h3 className="font-semibold text-base text-[#2F4F2F]">
                     {item.name}
                   </h3>
 
-                  <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 text-sm">
+                  <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2 text-sm">
                     <p className="text-[#7B7468]">
                       Size:
                       <span className="ml-2 font-medium text-[#2F4F2F]">

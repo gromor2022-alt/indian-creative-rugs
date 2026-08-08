@@ -6,65 +6,42 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     const {
-  orderId,
-  status,
-  shipDate,
-  carrier,
-  trackingNumber,
-  pickupDate,
-  refundStatus,
-  refundReason,
-  refundRequestedAt,
-} = body;
+      orderId,
+      status,
+      shipDate,
+      carrier,
+      trackingNumber,
+      pickupDate,
+      buyerNote,
+      refundStatus,
+      refundReason,
+      refundRequestedAt,
+    } = body;
 
-    const meta_data = [];
-
-    if (shipDate) {
-      meta_data.push({
-        key: "_icr_ship_date",
-        value: shipDate,
-      });
+    if (!orderId) {
+      return NextResponse.json(
+        { success: false, message: "Order ID is required." },
+        { status: 400 }
+      );
     }
 
-    if (carrier) {
-      meta_data.push({
-        key: "_icr_carrier",
-        value: carrier,
-      });
-    }
+    const meta_data: { key: string; value: string }[] = [];
 
-    if (trackingNumber) {
-      meta_data.push({
-        key: "_icr_tracking_number",
-        value: trackingNumber,
-      });
-    }
-if (pickupDate) {
-  meta_data.push({
-    key: "_icr_pickup_date",
-    value: pickupDate,
-  });
-}
-if (refundStatus) {
-  meta_data.push({
-    key: "_icr_refund_status",
-    value: refundStatus,
-  });
-}
+    const addMeta = (key: string, value: unknown) => {
+      if (value !== undefined && value !== null && String(value).trim() !== "") {
+        meta_data.push({ key, value: String(value) });
+      }
+    };
 
-if (refundReason) {
-  meta_data.push({
-    key: "_icr_refund_reason",
-    value: refundReason,
-  });
-}
+    addMeta("_icr_ship_date", shipDate);
+    addMeta("_icr_carrier", carrier);
+    addMeta("_icr_tracking_number", trackingNumber);
+    addMeta("_icr_pickup_date", pickupDate);
+    addMeta("_icr_buyer_note", buyerNote);
+    addMeta("_icr_refund_status", refundStatus);
+    addMeta("_icr_refund_reason", refundReason);
+    addMeta("_icr_refund_requested_at", refundRequestedAt);
 
-if (refundRequestedAt) {
-  meta_data.push({
-    key: "_icr_refund_requested_at",
-    value: refundRequestedAt,
-  });
-}
     const payload: any = {};
 
     if (status) {
@@ -75,27 +52,29 @@ if (refundRequestedAt) {
       payload.meta_data = meta_data;
     }
 
-    const response = await WooCommerce.put(
-      `orders/${orderId}`,
-      payload
-    );
-console.log("WooCommerce Response:", response.data);
+    // Keep the buyer message attached to the WooCommerce order as a customer note.
+    // This does not create a second email system; the existing WooCommerce email setup remains untouched.
+    if (buyerNote) {
+      payload.customer_note = String(buyerNote);
+    }
+
+    const response = await WooCommerce.put(`orders/${orderId}`, payload);
+
+    console.log("WooCommerce Response:", response.data);
+
     return NextResponse.json({
       success: true,
       order: response.data,
     });
-
   } catch (error: any) {
-
     console.error(error);
 
     return NextResponse.json(
       {
         success: false,
-        message: error.message,
+        message: error.message || "Failed to update order.",
       },
       { status: 500 }
     );
-
   }
 }

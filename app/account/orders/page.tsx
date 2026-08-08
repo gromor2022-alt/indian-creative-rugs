@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getTrackingUrl } from "@/lib/tracking";
 
 interface OrderItem {
   productId: number;
@@ -28,6 +29,34 @@ interface Order {
   items: OrderItem[];
 }
 
+function getStatusColor(status: string) {
+  switch (status.toLowerCase()) {
+    case "completed":
+      return "bg-green-50 text-green-700";
+    case "processing":
+      return "bg-blue-50 text-blue-700";
+    case "pending":
+      return "bg-yellow-50 text-yellow-700";
+    case "cancelled":
+      return "bg-red-50 text-red-700";
+    default:
+      return "bg-gray-100 text-gray-700";
+  }
+}
+
+function formatDate(date: string | null) {
+  if (!date) return "Not Available";
+
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return date;
+
+  return parsed.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,271 +67,227 @@ export default function OrdersPage() {
 
   async function loadOrders() {
     try {
-      const user = JSON.parse(
-  localStorage.getItem("user") || "{}"
-);
-      console.log("Customer:", user);
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+
       if (!user.email) {
         setLoading(false);
         return;
       }
 
       const res = await fetch(
-        `/api/orders?email=${user.email}`
+        `/api/orders?email=${encodeURIComponent(user.email)}`,
+        { cache: "no-store" }
       );
 
       const data = await res.json();
 
       if (data.success) {
-        setOrders(data.orders);
+        setOrders(data.orders || []);
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error("Customer orders error:", error);
     } finally {
       setLoading(false);
     }
   }
-  function getStatusColor(status: string) {
-    switch (status.toLowerCase()) {
-      case "completed":
-        return "bg-green-100 text-green-700";
 
-      case "processing":
-        return "bg-blue-100 text-blue-700";
-
-      case "pending":
-        return "bg-yellow-100 text-yellow-700";
-
-      case "cancelled":
-        return "bg-red-100 text-red-700";
-
-      default:
-        return "bg-gray-100 text-gray-700";
+  function trackOrder(order: Order) {
+    if (!order.trackingNumber || !order.carrier) {
+      alert("Tracking information is not available yet.");
+      return;
     }
-  }
 
-  function formatDate(date: string | null) {
-    if (!date) return "Not Available";
+    const url = getTrackingUrl(order.carrier, order.trackingNumber);
 
-    return new Date(date).toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
+    if (!url) {
+      alert("Tracking link is not available for this carrier yet.");
+      return;
+    }
+
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto py-20 text-center">
-        <h2 className="text-xl font-semibold">
-          Loading your orders...
-        </h2>
-      </div>
+      <main className="min-h-screen bg-[#F8F6F2] px-4 py-12 sm:px-6">
+        <div className="mx-auto max-w-5xl text-center">
+          <p className="text-sm text-[#7B7468]">Loading your orders...</p>
+        </div>
+      </main>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-
-      <h1 className="text-3xl font-bold mb-2">
-        My Orders
-      </h1>
-
-      <p className="text-gray-500 mb-10">
-        Track every handmade rug you've ordered from Indian Creative Rugs.
-      </p>
-      <p className="mb-4 text-red-600 font-bold">
-  Total Orders: {orders.length}
-</p>
-      {orders.length === 0 ? (
-        <div className="bg-white rounded-2xl border p-12 text-center">
-          <h2 className="text-xl font-semibold mb-2">
-            No Orders Yet
-          </h2>
-
-          <p className="text-gray-500 mb-6">
-            You haven't placed any orders yet.
-          </p>
-
-          <Link
-            href="/shop"
-            className="inline-flex px-6 py-3 rounded-xl bg-[#B89B5E] text-white hover:bg-[#9E824D] transition"
-          >
-            Explore Rugs
-          </Link>
-        </div>
-      ) : (
-        <div className="space-y-8">
-
-          {orders.map((order) => (
-
-            <div
-              key={order.id}
-              className="bg-white rounded-2xl border shadow-sm overflow-hidden"
-            >
-<div className="flex items-center justify-between px-6 py-5 border-b">
-
-  <div>
-    <h2 className="text-lg font-bold">
-      Order #{order.number}
-    </h2>
-
-    <p className="text-sm text-gray-500">
-      Ordered on {formatDate(order.orderDate)}
-    </p>
-  </div>
-
-  <span
-    className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}
-  >
-    {order.status}
-  </span>
-
-</div>             
-
- <div className="p-6">
-
-                {order.items.map((item) => (
-
-                  <div
-                    key={item.productId}
-                    className="flex flex-col md:flex-row gap-6"
-                  >
-
-                    <div className="relative w-full md:w-44 h-44 rounded-xl overflow-hidden border">
-
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                      />
-
-                    </div>
-
-                    <div className="flex-1">
-
-                      <h3 className="text-xl font-semibold">
-                        {item.name}
-                      </h3>
-
-                      <div className="mt-5 grid grid-cols-2 gap-5 text-sm">
-
-                        <div>
-                          <p className="text-gray-500">
-                            Size
-                          </p>
-
-                          <p className="font-medium">
-                            {item.size ?? "—"}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500">
-                            Quantity
-                          </p>
-
-                          <p className="font-medium">
-                            {item.quantity}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500">
-                            Amount
-                          </p>
-
-                          <p className="font-semibold text-[#B89B5E]">
-                            ${order.total}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500">
-                            Expected Ship Date
-                          </p>
-
-                          <p className="font-medium">
-                            {formatDate(order.expectedShipDate)}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500">
-                            Carrier
-                          </p>
-
-                          <p className="font-medium">
-                            {order.carrier ?? "Not Assigned"}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500">
-                            Tracking Number
-                          </p>
-
-                          <p className="font-medium break-all">
-                            {order.trackingNumber ?? "Not Assigned"}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-gray-500">
-                            Pickup Date
-                          </p>
-
-                          <p className="font-medium">
-                            {formatDate(order.pickupDate)}
-                          </p>
-                        </div>
-
-                      </div>
-
-                      <div className="mt-8 flex gap-4">
-
-                        <Link
-                          href={`/shop/${item.slug}`}
-                          className="px-5 py-2 rounded-lg border hover:bg-gray-50 transition"
-                        >
-                          View Product
-                        </Link>
-
-                        <button
-                          className="px-5 py-2 rounded-lg bg-[#B89B5E] text-white hover:bg-[#9E824D] transition"
-                        >
-                          Track Order
-                        </button>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                               ))}
-
-              </div>
-
+    <main className="min-h-screen bg-[#F8F6F2] px-4 py-8 sm:px-6 sm:py-10">
+      <div className="mx-auto max-w-5xl">
+        <header className="mb-6">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[2px] text-[#B89B5E]">
+                Indian Creative Rugs
+              </p>
+              <h1 className="mt-1 font-instrument text-3xl text-[#22304A] sm:text-4xl">
+                My Orders
+              </h1>
+              <p className="mt-1.5 text-sm text-[#6F685E]">
+                Your handcrafted rug orders in one place.
+              </p>
             </div>
 
-          ))}
+            <div className="shrink-0 rounded-xl border border-[#E8E2D9] bg-white px-3 py-2 text-center shadow-sm">
+              <p className="text-[10px] font-semibold uppercase tracking-[1.5px] text-[#9A9387]">
+                Orders
+              </p>
+              <p className="mt-0.5 text-lg font-bold leading-none text-[#2F4F2F]">
+                {orders.length}
+              </p>
+            </div>
+          </div>
+        </header>
 
-        </div>
+        {orders.length === 0 ? (
+          <div className="rounded-2xl border border-[#E8E2D9] bg-white p-8 text-center shadow-sm">
+            <h2 className="font-instrument text-2xl text-[#2F4F2F]">
+              No Orders Yet
+            </h2>
+            <p className="mt-2 text-sm text-[#7B7468]">
+              You haven&apos;t placed any orders yet.
+            </p>
+            <Link
+              href="/rugs"
+              className="mt-5 inline-flex rounded-full bg-[#556B2F] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#B89B5E]"
+            >
+              Explore Rugs
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {orders.map((order) => (
+              <article
+                key={order.id}
+                className="min-w-0 overflow-hidden rounded-2xl border border-[#E8E2D9] bg-white shadow-sm"
+              >
+                <div className="flex items-center justify-between gap-3 border-b border-[#EEE6DA] px-4 py-3 sm:px-5">
+                  <div className="min-w-0">
+                    <h2 className="truncate text-sm font-semibold text-[#2F4F2F] sm:text-base">
+                      Order #{order.number}
+                    </h2>
+                    <p className="mt-0.5 text-[11px] text-[#9A9387]">
+                      Ordered {formatDate(order.orderDate)}
+                    </p>
+                  </div>
 
-      )}
+                  <span
+                    className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide ${getStatusColor(order.status)}`}
+                  >
+                    {order.status}
+                  </span>
+                </div>
 
-    </div>
+                <div className="p-4 sm:p-5">
+                  {order.items.map((item) => (
+                    <div
+                      key={`${order.id}-${item.productId}`}
+                      className="flex min-w-0 flex-col gap-4 sm:flex-row"
+                    >
+                      <div className="relative flex h-40 w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#EEE6DA] bg-[#F3F0EA] p-2 sm:h-32 sm:w-32">
+                        {item.image ? (
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fill
+                            sizes="(max-width: 640px) 100vw, 128px"
+                            className="object-contain p-2"
+                          />
+                        ) : (
+                          <span className="text-xs text-[#9A9387]">No Image</span>
+                        )}
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <h3 className="break-words text-base font-semibold leading-6 text-[#2F4F2F] sm:text-lg">
+                          {item.name}
+                        </h3>
+
+                        <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-xs sm:text-sm">
+                          <div>
+                            <p className="text-[#9A9387]">Size</p>
+                            <p className="font-medium text-[#2F4F2F]">
+                              {item.size || "—"}
+                            </p>
+                          </div>
+
+                          <div>
+                            <p className="text-[#9A9387]">Shape</p>
+                            <p className="font-medium text-[#2F4F2F]">
+                              {item.shape || "—"}
+                            </p>
+                          </div>
+
+                          <div>
+                            <p className="text-[#9A9387]">Quantity</p>
+                            <p className="font-medium text-[#2F4F2F]">
+                              {item.quantity}
+                            </p>
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="text-[#9A9387]">Order Total</p>
+                            <p className="break-all font-semibold text-[#B89B5E]">
+                              ${order.total}
+                            </p>
+                          </div>
+
+                          <div>
+                            <p className="text-[#9A9387]">Expected Shipping</p>
+                            <p className="font-medium text-[#2F4F2F]">
+                              {formatDate(order.expectedShipDate)}
+                            </p>
+                          </div>
+
+                          <div>
+                            <p className="text-[#9A9387]">Carrier</p>
+                            <p className="font-medium text-[#2F4F2F]">
+                              {order.carrier || "Not Assigned"}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                          <Link
+                            href={`/rugs/${item.slug}`}
+                            className="inline-flex items-center justify-center rounded-xl border border-[#DCD5CB] px-4 py-2 text-xs font-semibold text-[#2F4F2F] transition hover:bg-[#F8F6F2] sm:text-sm"
+                          >
+                            View Product
+                          </Link>
+
+                          {order.trackingNumber && order.carrier ? (
+                            <button
+                              type="button"
+                              onClick={() => trackOrder(order)}
+                              className="inline-flex items-center justify-center rounded-xl bg-[#556B2F] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#465823] sm:text-sm"
+                            >
+                              Track Order →
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => trackOrder(order)}
+                              className="inline-flex items-center justify-center rounded-xl bg-[#EEE9DE] px-4 py-2 text-xs font-semibold text-[#7B7468] sm:text-sm"
+                            >
+                              Tracking Pending
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
+    </main>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
