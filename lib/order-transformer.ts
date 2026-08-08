@@ -24,22 +24,41 @@ export interface CustomerOrder {
   items: OrderItem[];
 }
 
-function getMetaValue(meta: any[] = [], key: string) {
-  const item = meta.find((m) => m.key === key);
-  return item?.value ?? null;
-}
-
 function getAttribute(meta: any[] = [], keys: string[]) {
-  for (const key of keys) {
-    const value = getMetaValue(meta, key);
+  for (const item of meta) {
 
-    if (value) {
-      return value;
+    const metaKey = String(
+      item.key ?? item.display_key ?? ""
+    ).toLowerCase();
+
+    const wanted = keys.map((k) => k.toLowerCase());
+
+    if (wanted.includes(metaKey)) {
+      return (
+        item.display_value ??
+        item.value ??
+        null
+      );
     }
   }
 
   return null;
 }
+
+function getMetaValue(meta: any[] = [], key: string) {
+  const item = meta.find(
+    (m) =>
+      m.key === key ||
+      m.display_key === key
+  );
+
+  return (
+    item?.display_value ??
+    item?.value ??
+    null
+  );
+}
+ 
 
 export function transformOrder(
   order: any,
@@ -59,6 +78,20 @@ export function transformOrder(
     pickupDate: getMetaValue(order.meta_data, "_icr_pickup_date"),
 
     items: (order.line_items || []).map((item: any) => {
+    console.log("========== ICR ORDER DEBUG ==========");
+console.log("ORDER ID:", order.id);
+console.log("ORDER NUMBER:", order.number);
+console.log("ORDER META:", JSON.stringify(order.meta_data, null, 2));
+
+(order.line_items || []).forEach((item: any) => {
+  console.log("PRODUCT:", item.name);
+  console.log(
+    "LINE ITEM META:",
+    JSON.stringify(item.meta_data, null, 2)
+  );
+});
+
+console.log("======================================");
       const product = productMap.get(item.product_id);
 
       return {

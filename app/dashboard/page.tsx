@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { getDashboardStats } from "@/lib/dashboard";
 import OrderCard from "@/components/dashboard/OrderCard";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export default async function DashboardPage() {
 const stats = await getDashboardStats();
   return (

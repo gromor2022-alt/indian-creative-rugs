@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 import AddressAutocomplete from "@/components/AddressAutocomplete";
 import Select from "react-select";
 import countryList from "react-select-country-list";
-import { useMemo } from "react";
 
 export default function CheckoutPage() {
   const { cart } = useCart();
@@ -31,11 +30,15 @@ export default function CheckoutPage() {
   );
 
   const total = subtotal;
-  const countryOptions = useMemo(() => countryList().getData(), []);
 
- const handleChange = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-) => {
+  const countryOptions = useMemo(
+    () => countryList().getData(),
+    []
+  );
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -47,7 +50,7 @@ export default function CheckoutPage() {
       alert("Cart is empty");
       return;
     }
-console.log("Form Data:", formData);
+
     if (
       !formData.firstName ||
       !formData.lastName ||
@@ -65,49 +68,45 @@ console.log("Form Data:", formData);
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "/api/create-order",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-          body: JSON.stringify({
-            ...formData,
+      const response = await fetch("/api/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
 
-            items: cart.map((item) => ({
-              productId: Number(item.id),
-              quantity: item.quantity,
-            })),
-          }),
-        }
-      );
+          items: cart.map((item) => ({
+            productId: Number(item.id),
+            quantity: Number(item.quantity),
+
+            // Custom rug configuration
+            size: item.size,
+            shape: item.shape,
+
+            // Custom price selected by customer
+            price: Number(item.price),
+          })),
+        }),
+      });
 
       const data = await response.json();
 
-      console.log(data);
+      console.log("CREATE ORDER RESPONSE:", data);
 
       if (!data.success) {
-        alert(
-          data.message ||
-            "Order creation failed"
-        );
+        alert(data.message || "Order creation failed");
         return;
       }
 
       if (data.paymentUrl) {
-        window.location.href =
-          data.paymentUrl;
+        window.location.href = data.paymentUrl;
         return;
       }
 
-      alert(
-        `Order Created #${data.orderId}`
-      );
+      alert(`Order Created #${data.orderId}`);
     } catch (error) {
-      console.error(error);
-
+      console.error("CHECKOUT ERROR:", error);
       alert("Order creation failed");
     } finally {
       setLoading(false);
@@ -117,6 +116,8 @@ console.log("Form Data:", formData);
   return (
     <main className="bg-[#F7EADF] min-h-screen">
       <section className="max-w-[1500px] mx-auto px-6 py-16">
+
+        {/* Page Heading */}
         <div className="mb-10">
           <p className="uppercase tracking-[4px] text-[#B89B5E] text-sm mb-2">
             Secure Checkout
@@ -128,11 +129,16 @@ console.log("Form Data:", formData);
         </div>
 
         <div className="grid lg:grid-cols-[2fr_1fr] gap-12">
+
+          {/* Billing Details */}
           <div className="bg-white rounded-2xl border border-[#ECE5DA] p-8">
+
             <h2 className="font-instrument text-[32px] text-[#22304A] mb-8">
               Billing Details
             </h2>
+
             <div className="grid md:grid-cols-2 gap-5">
+
               <input
                 name="firstName"
                 placeholder="First Name"
@@ -165,81 +171,81 @@ console.log("Form Data:", formData);
                 onChange={handleChange}
                 className="border border-[#D9D1C7] bg-[#FFFCF8] px-5 py-4 rounded-xl text-[#556B2F] placeholder:text-[#9B9488] transition-all duration-300 focus:border-[#556B2F] focus:ring-2 focus:ring-[#D4AF37]/30 focus:outline-none md:col-span-2"
               />
-<Select
-  options={countryOptions}
-  value={countryOptions.find(
-  (option: { value: string; label: string }) =>
-    option.value === formData.country
-)}
-  onChange={(selected) =>
-    setFormData({
-      ...formData,
-      country: selected?.value || "",
-    })
-  }
-  placeholder="Select Country"
-  classNamePrefix="react-select"
-  styles={{
-    control: (base) => ({
-      ...base,
-      minHeight: "58px",
-      borderRadius: "12px",
-      borderColor: "#D9D1C7",
-      backgroundColor: "#FFFFFF",
-      boxShadow: "none",
-      "&:hover": {
-        borderColor: "#556B2F",
-      },
-    }),
 
-    option: (base, state) => ({
-      ...base,
-      backgroundColor: state.isFocused
-        ? "#F7EADF"
-        : "#FFFFFF",
-      color: "#556B2F",
-      cursor: "pointer",
-    }),
+              <Select
+                options={countryOptions}
+                value={countryOptions.find(
+                  (option: { value: string; label: string }) =>
+                    option.value === formData.country
+                )}
+                onChange={(selected) =>
+                  setFormData({
+                    ...formData,
+                    country: selected?.value || "",
+                  })
+                }
+                placeholder="Select Country"
+                classNamePrefix="react-select"
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    minHeight: "58px",
+                    borderRadius: "12px",
+                    borderColor: "#D9D1C7",
+                    backgroundColor: "#FFFFFF",
+                    boxShadow: "none",
+                    "&:hover": {
+                      borderColor: "#556B2F",
+                    },
+                  }),
 
-    singleValue: (base) => ({
-      ...base,
-      color: "#556B2F",
-      fontWeight: 500,
-    }),
+                  option: (base, state) => ({
+                    ...base,
+                    backgroundColor: state.isFocused
+                      ? "#F7EADF"
+                      : "#FFFFFF",
+                    color: "#556B2F",
+                    cursor: "pointer",
+                  }),
 
-    placeholder: (base) => ({
-      ...base,
-      color: "#8B8B8B",
-    }),
+                  singleValue: (base) => ({
+                    ...base,
+                    color: "#556B2F",
+                    fontWeight: 500,
+                  }),
 
-    menu: (base) => ({
-      ...base,
-      borderRadius: "12px",
-      overflow: "hidden",
-      zIndex: 9999,
-    }),
-  }}
-/>
+                  placeholder: (base) => ({
+                    ...base,
+                    color: "#8B8B8B",
+                  }),
+
+                  menu: (base) => ({
+                    ...base,
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    zIndex: 9999,
+                  }),
+                }}
+              />
+
               <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-[#556B2F] mb-2">
+                  Address
+                </label>
 
-  <label className="block text-sm font-medium text-[#556B2F] mb-2">
-    Address
-  </label>
-
-  <AddressAutocomplete
-    onSelect={(address) =>
-      setFormData({
-        ...formData,
-        address: address.address,
-        city: address.city,
-        state: address.state,
-        zipCode: address.zipCode,
-        country: address.country,
-      })
-    }
-  />
-
-</div>
+                <AddressAutocomplete
+                  onSelect={(address) =>
+                    setFormData({
+                      ...formData,
+                      address: address.address,
+                      city: address.city,
+                      state: address.state,
+                      zipCode: address.zipCode,
+                      country: address.country,
+                    })
+                  }
+                />
+              </div>
 
               <input
                 name="city"
@@ -264,21 +270,26 @@ console.log("Form Data:", formData);
                 onChange={handleChange}
                 className="border border-[#D9D1C7] bg-[#FFFCF8] px-5 py-4 rounded-xl text-[#556B2F] placeholder:text-[#9B9488] transition-all duration-300 focus:border-[#556B2F] focus:ring-2 focus:ring-[#D4AF37]/30 focus:outline-none md:col-span-2"
               />
+
             </div>
           </div>
 
+          {/* Order Summary */}
           <div>
             <div className="bg-white rounded-2xl border border-[#ECE5DA] p-7 sticky top-10">
+
               <h2 className="font-instrument text-[28px] text-[#22304A] mb-6">
                 Order Summary
               </h2>
 
               <div className="space-y-5">
+
                 {cart.map((item) => (
                   <div
                     key={`${item.id}-${item.size}-${item.shape}`}
                     className="flex gap-4 border-b border-[#ECE5DA] pb-4"
                   >
+
                     <div className="relative w-16 h-20 rounded-lg overflow-hidden">
                       <Image
                         src={item.image}
@@ -289,6 +300,7 @@ console.log("Form Data:", formData);
                     </div>
 
                     <div className="flex-1">
+
                       <p className="font-medium">
                         {item.name}
                       </p>
@@ -300,82 +312,96 @@ console.log("Form Data:", formData);
                       <p className="text-sm text-gray-500">
                         Qty: {item.quantity}
                       </p>
+
                     </div>
 
                     <div>
                       $
                       {(
-                        item.price *
-                        item.quantity
+                        item.price * item.quantity
                       ).toFixed(2)}
                     </div>
+
                   </div>
                 ))}
+
               </div>
 
               <div className="mt-8 border-t pt-4">
+
                 <div className="flex justify-between text-xl font-semibold">
                   <span>Total</span>
+
                   <span>
                     ${total.toFixed(2)}
                   </span>
                 </div>
+
               </div>
-<div className="mt-6 space-y-3 rounded-xl bg-[#FDFBF7] border border-[#ECE5DA] p-5">
 
-  <div className="flex items-center gap-3 text-[#556B2F]">
-    <span>🔒</span>
-    <span className="text-sm font-medium">
-      256-bit SSL Secure Checkout
-    </span>
-  </div>
+              <div className="mt-6 space-y-3 rounded-xl bg-[#FDFBF7] border border-[#ECE5DA] p-5">
 
-  <div className="flex items-center gap-3 text-[#556B2F]">
-    <span>🚚</span>
-    <span className="text-sm font-medium">
-      Free Worldwide Shipping
-    </span>
-  </div>
+                <div className="flex items-center gap-3 text-[#556B2F]">
+                  <span>🔒</span>
 
-    <div className="flex items-center gap-3 text-[#556B2F]">
-    <span>💳</span>
-    <span className="text-sm font-medium">
-      Secure Payment via PayPal
-    </span>
-  </div>
+                  <span className="text-sm font-medium">
+                    256-bit SSL Secure Checkout
+                  </span>
+                </div>
 
-</div>
+                <div className="flex items-center gap-3 text-[#556B2F]">
+                  <span>🚚</span>
+
+                  <span className="text-sm font-medium">
+                    No Custom Fees or Duties-- You Pay What You See
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3 text-[#556B2F]">
+                  <span>💳</span>
+
+                  <span className="text-sm font-medium">
+                    Secure Payment via PayPal
+                  </span>
+                </div>
+
+              </div>
+
               <button
                 onClick={handlePlaceOrder}
                 disabled={loading}
                 className="
-w-full
-mt-8
-bg-[#556B2F]
-hover:bg-[#435522]
-text-white
-py-4
-rounded-xl
-font-semibold
-tracking-[1px]
-transition-all
-duration-300
-hover:shadow-xl
-hover:scale-[1.02]
-disabled:opacity-70
-disabled:cursor-not-allowed
-"
+                  w-full
+                  mt-8
+                  bg-[#556B2F]
+                  hover:bg-[#435522]
+                  text-white
+                  py-4
+                  rounded-xl
+                  font-semibold
+                  tracking-[1px]
+                  transition-all
+                  duration-300
+                  hover:shadow-xl
+                  hover:scale-[1.02]
+                  disabled:opacity-70
+                  disabled:cursor-not-allowed
+                "
               >
                 {loading
-  ? "Creating Secure Checkout..."
-  : "Secure Checkout with PayPal"}
+                  ? "Creating Secure Checkout..."
+                  : "Secure Checkout with PayPal"}
               </button>
-<p className="mt-4 text-center text-sm text-[#7A7468] leading-relaxed">
-  Your payment is securely processed through <strong>PayPal</strong>.
-  We never store your card or banking information.
-</p>
+
+              <p className="mt-4 text-center text-sm text-[#7A7468] leading-relaxed">
+                Your payment is securely processed through{" "}
+                <strong>PayPal</strong>.
+                We never store your card or banking information.
+              </p>
+
             </div>
           </div>
+
         </div>
       </section>
     </main>

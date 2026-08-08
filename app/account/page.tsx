@@ -105,37 +105,37 @@ export default function AccountPage() {
 <p className="text-lg text-gray-600 mb-10">
   Welcome to your Indian Creative Rugs Family.
 </p>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+<div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
 
- <Link
-  href="/account/orders"
-  className="bg-white rounded-2xl shadow-sm p-8 hover:shadow-lg transition block text-left"
->
-<Link
-  href="/account/favorites"
-  className="bg-white rounded-2xl shadow-sm p-8 hover:shadow-lg transition block text-left"
->
-  <div className="text-4xl mb-4">❤️</div>
+  <Link
+    href="/account/orders"
+    className="bg-white rounded-2xl shadow-sm p-8 hover:shadow-lg transition block text-left"
+  >
+    <div className="text-4xl mb-4">📦</div>
 
-  <h3 className="font-instrument text-3xl text-[#22304A]">
-    My Favorites
-  </h3>
+    <h3 className="font-instrument text-3xl text-[#22304A]">
+      My Orders
+    </h3>
 
-  <p className="text-gray-500 mt-2">
-    View your saved rugs.
-  </p>
-</Link>
- 
- <div className="text-4xl mb-4">📦</div>
+    <p className="text-gray-500 mt-2">
+      View your order history.
+    </p>
+  </Link>
 
-  <h3 className="font-instrument text-3xl text-[#22304A]">
-    My Orders
-  </h3>
+  <Link
+    href="/account/favorites"
+    className="bg-white rounded-2xl shadow-sm p-8 hover:shadow-lg transition block text-left"
+  >
+    <div className="text-4xl mb-4">❤️</div>
 
-  <p className="text-gray-500 mt-2">
-    View your order history.
-  </p>
-</Link>
+    <h3 className="font-instrument text-3xl text-[#22304A]">
+      My Favorites
+    </h3>
+
+    <p className="text-gray-500 mt-2">
+      View your saved rugs.
+    </p>
+  </Link>
 
   <button
     className="bg-white rounded-2xl shadow-sm p-8 hover:shadow-lg transition text-left"
