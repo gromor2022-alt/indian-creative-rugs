@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import "./globals.css";
 import { organizationSchema } from "@/lib/schema";
+import LenisProvider from "@/components/LenisProvider";
 
 const sen = Sen({
   subsets: ["latin"],
@@ -131,13 +132,15 @@ const organization = organizationSchema();
     __html: JSON.stringify(organization),
   }}
 />
-        <CartProvider>
-          <Header />
+        <LenisProvider>
+          <CartProvider>
+            <Header />
 
           <main>{children}</main>
 
-          <Footer />
-        </CartProvider>
+            <Footer />
+          </CartProvider>
+        </LenisProvider>
       </body>
     </html>
   );

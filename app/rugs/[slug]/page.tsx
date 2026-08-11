@@ -59,6 +59,7 @@ export async function generateMetadata({
     ],
   });
 }
+
 export default async function ProductPage({
   params,
 }: {
@@ -71,17 +72,20 @@ export default async function ProductPage({
   if (!product) {
     notFound();
   }
-const schema = productSchema(product);
+
+  const schema = productSchema(product);
+
   return (
-    <main className="bg-[#FFFFFF] min-h-screen">
-<script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify(schema),
-  }}
-/>
-      <div className="max-w-[1500px] mx-auto px-8 py-14">
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
+    <main className="min-h-screen bg-[#FFFFFF]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema),
+        }}
+      />
+
+      <div className="mx-auto max-w-[1500px] px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
+        <div className="grid items-start gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
           <ProductGallery
             images={product.images}
             name={product.name}

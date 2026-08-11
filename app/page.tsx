@@ -4,7 +4,7 @@ import BestSellers from "../components/BestSellers";
 import Intro from "../components/Intro";
 import WhyChoose from "../components/WhyChoose";
 import LeadTime from "../components/LeadTime";
-
+import ICRScrollEffects from "@/components/ICRScrollEffects";
 
 import { getFeaturedProducts } from "@/lib/getFeaturedProducts";
 
@@ -14,6 +14,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-[#F7EADF]">
       <Hero />
+      <ICRScrollEffects />
       <CollectionsGrid />
       <BestSellers products={featuredProducts} />
       <LeadTime />

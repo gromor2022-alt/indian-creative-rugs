@@ -1,0 +1,58 @@
+.icr-hero-panel,
+.icr-hero-media { will-change: transform; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .icr-hero-panel { animation: icr-hero-settle 900ms ease-out both; }
+  .icr-hero-panel:nth-child(2) { animation-delay: 100ms; }
+
+  .icr-hero-media { animation: icr-hero-media-settle 1200ms ease-out both; }
+  .icr-hero-panel:nth-child(2) .icr-hero-media { animation-delay: 100ms; }
+
+  .icr-collection-heading {
+    animation: icr-heading-in 800ms ease-out both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+
+  .icr-collection-card {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 700ms ease,
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 500ms ease;
+    transition-delay: var(--icr-delay, 0ms);
+  }
+
+  .icr-collection-card.icr-in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes icr-hero-settle {
+  from { transform: translateY(10px); opacity: .96; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes icr-hero-media-settle {
+  from { transform: scale(1.045); }
+  to { transform: scale(1.01); }
+}
+
+@keyframes icr-heading-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icr-hero-panel,
+  .icr-hero-media,
+  .icr-collection-heading,
+  .icr-collection-card {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
