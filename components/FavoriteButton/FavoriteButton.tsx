@@ -22,7 +22,9 @@ function saveGuestFavorites(ids: number[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
 }
 
-export default function FavoriteButton({ productId }: FavoriteButtonProps) {
+export default function FavoriteButton({
+  productId,
+}: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -32,22 +34,33 @@ export default function FavoriteButton({ productId }: FavoriteButtonProps) {
 
   async function loadFavorite() {
     try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const user = JSON.parse(
+        localStorage.getItem("user") || "{}"
+      );
 
       if (!user.email) {
-        setFavorite(getGuestFavorites().includes(productId));
+        setFavorite(
+          getGuestFavorites().includes(productId)
+        );
         return;
       }
 
       const res = await fetch(
-        `/api/favorites?email=${encodeURIComponent(user.email)}`
+        `/api/favorites?email=${encodeURIComponent(
+          user.email
+        )}`,
+        {
+          cache: "no-store",
+        }
       );
+
       const data = await res.json();
 
       if (data.success) {
         const exists = data.favorites.some(
           (rug: any) => rug.id === productId
         );
+
         setFavorite(exists);
       }
     } catch (error) {
@@ -55,20 +68,26 @@ export default function FavoriteButton({ productId }: FavoriteButtonProps) {
     }
   }
 
-  async function toggleFavorite(e: React.MouseEvent<HTMLButtonElement>) {
+  async function toggleFavorite(
+    e: React.MouseEvent<HTMLButtonElement>
+  ) {
     e.preventDefault();
     e.stopPropagation();
 
     if (loading) return;
 
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const user = JSON.parse(
+      localStorage.getItem("user") || "{}"
+    );
 
-    // Guests can save favorites locally without an account.
+    // Guests can save favorites locally.
     if (!user.email) {
       const ids = getGuestFavorites();
 
       if (ids.includes(productId)) {
-        saveGuestFavorites(ids.filter((id) => id !== productId));
+        saveGuestFavorites(
+          ids.filter((id) => id !== productId)
+        );
         setFavorite(false);
       } else {
         saveGuestFavorites([...ids, productId]);
@@ -86,7 +105,11 @@ export default function FavoriteButton({ productId }: FavoriteButtonProps) {
 
       const res = await fetch(endpoint, {
         method,
-        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
         body: JSON.stringify({
           email: user.email,
           productId,
@@ -96,10 +119,14 @@ export default function FavoriteButton({ productId }: FavoriteButtonProps) {
       const data = await res.json();
 
       if (!data.success) {
-        alert(data.message || "Could not update favorites.");
+        alert(
+          data.message ||
+            "Could not update favorites."
+        );
         return;
       }
 
+      // Update UI immediately after successful DB update.
       setFavorite(!favorite);
     } catch (error) {
       console.error("Favorite Error:", error);
@@ -114,13 +141,27 @@ export default function FavoriteButton({ productId }: FavoriteButtonProps) {
       className={styles.button}
       onClick={toggleFavorite}
       disabled={loading}
-      aria-label={favorite ? "Remove from Favorites" : "Add to Favorites"}
-      title={favorite ? "Remove from Favorites" : "Add to Favorites"}
+      aria-label={
+        favorite
+          ? "Remove from Favorites"
+          : "Add to Favorites"
+      }
+      title={
+        favorite
+          ? "Remove from Favorites"
+          : "Add to Favorites"
+      }
     >
       <Heart
         size={20}
-        className={`${styles.heart} ${favorite ? styles.active : ""}`}
-        fill={favorite ? "#ef4444" : "transparent"}
+        className={`${styles.heart} ${
+          favorite ? styles.active : ""
+        }`}
+        fill={
+          favorite
+            ? "#ef4444"
+            : "transparent"
+        }
       />
     </button>
   );

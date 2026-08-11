@@ -119,9 +119,72 @@ export default function CheckoutPage() {
 
         {/* Page Heading */}
         <div className="mb-10">
-          <p className="uppercase tracking-[4px] text-[#B89B5E] text-sm mb-2">
+          <p className="uppercase tracking-[4px] text-[#B89B5E] text-sm mb-3">
             Secure Checkout
           </p>
+
+          {/* Payment Logos */}
+          <div className="flex flex-wrap items-center gap-3 mb-5">
+            <div className="flex h-10 min-w-[64px] items-center justify-center rounded-md border border-[#E3DBD0] bg-white px-3 shadow-sm">
+              <Image
+                src="/images/payment-logos/paypal.webp"
+                alt="PayPal"
+                width={70}
+                height={32}
+                className="h-7 w-auto object-contain"
+              />
+            </div>
+
+            <div className="flex h-10 min-w-[64px] items-center justify-center rounded-md border border-[#E3DBD0] bg-white px-3 shadow-sm">
+              <Image
+                src="/images/payment-logos/visa.jpg"
+                alt="Visa"
+                width={70}
+                height={32}
+                className="h-7 w-auto object-contain"
+              />
+            </div>
+
+            <div className="flex h-10 min-w-[64px] items-center justify-center rounded-md border border-[#E3DBD0] bg-white px-3 shadow-sm">
+              <Image
+                src="/images/payment-logos/mastercard.webp"
+                alt="Mastercard"
+                width={70}
+                height={32}
+                className="h-7 w-auto object-contain"
+              />
+            </div>
+
+            <div className="flex h-10 min-w-[64px] items-center justify-center rounded-md border border-[#E3DBD0] bg-white px-3 shadow-sm">
+              <Image
+                src="/images/payment-logos/discover.jpg"
+                alt="Discover"
+                width={70}
+                height={32}
+                className="h-7 w-auto object-contain"
+              />
+            </div>
+
+            <div className="flex h-10 min-w-[64px] items-center justify-center rounded-md border border-[#E3DBD0] bg-white px-3 shadow-sm">
+              <Image
+                src="/images/payment-logos/apple-pay.webp"
+                alt="Apple Pay"
+                width={70}
+                height={32}
+                className="h-7 w-auto object-contain"
+              />
+            </div>
+
+            <div className="flex h-10 min-w-[64px] items-center justify-center rounded-md border border-[#E3DBD0] bg-white px-3 shadow-sm">
+              <Image
+                src="/images/payment-logos/klarna.webp"
+                alt="Klarna"
+                width={70}
+                height={32}
+                className="h-7 w-auto object-contain"
+              />
+            </div>
+          </div>
 
           <h1 className="font-instrument text-[52px] text-[#22304A]">
             Checkout
