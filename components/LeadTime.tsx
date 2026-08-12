@@ -27,93 +27,142 @@ const deliveryOptions = [
 export default function LeadTime() {
   return (
     <section className="bg-[#F7EADF] py-24">
-
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="mx-auto max-w-7xl px-6">
 
         {/* Heading */}
-
-        <div className="text-center mb-16">
-
-          <h2 className="font-instrument text-[46px] md:text-[68px] text-[#556B2F]">
+        <div className="mb-10 text-center md:mb-16">
+          <h2 className="font-instrument text-[46px] text-[#556B2F] md:text-[68px]">
             Choose Your Delivery Timeline
           </h2>
 
-          <div className="flex justify-center my-6">
-            <div className="w-20 h-[2px] bg-[#D4AF37] rounded-full"></div>
+          <div className="my-6 flex justify-center">
+            <div className="h-[2px] w-20 rounded-full bg-[#D4AF37]" />
           </div>
 
-          <p className="max-w-3xl mx-auto text-lg leading-8 text-[#7B7468]">
-            Whether you need a rug immediately or wish to commission a handcrafted masterpiece,
-            we offer delivery options tailored to your project.
+          <p className="mx-auto max-w-3xl text-lg leading-8 text-[#7B7468]">
+            Whether you need a rug immediately or wish to commission a
+            handcrafted masterpiece, we offer delivery options tailored to
+            your project.
           </p>
-
         </div>
 
-        {/* Cards */}
+        {/* Mobile swipe hint */}
+        <div className="mb-3 flex items-center justify-end gap-2 text-[#556B2F] md:hidden">
+          <span className="text-[11px] font-medium uppercase tracking-[0.18em]">
+            Swipe
+          </span>
 
-        <div className="grid lg:grid-cols-2 gap-10">
+          <span
+            aria-hidden="true"
+            className="flex h-7 w-7 items-center justify-center rounded-full border border-[#556B2F]/30 text-lg leading-none"
+          >
+            →
+          </span>
+        </div>
 
+        {/* Delivery Cards */}
+        <div
+          className="
+            flex
+            gap-5
+            overflow-x-auto
+            overscroll-x-contain
+            pb-5
+            snap-x
+            snap-mandatory
+            scrollbar-hide
+
+            lg:grid
+            lg:grid-cols-2
+            lg:gap-10
+            lg:overflow-visible
+            lg:pb-0
+            lg:snap-none
+          "
+        >
           {deliveryOptions.map((item) => (
-
             <div
               key={item.title}
-              className="group overflow-hidden rounded-[30px] bg-white shadow-sm hover:shadow-2xl transition-all duration-500"
+              className="
+                group
+                flex-none
+                w-[86vw]
+                snap-start
+                overflow-hidden
+                rounded-[30px]
+                bg-white
+                shadow-sm
+                transition-all
+                duration-500
+                hover:shadow-2xl
+
+                lg:w-auto
+              "
             >
-
-              <div className="relative h-[420px] overflow-hidden">
-
+              {/* Image */}
+              <div className="relative h-[360px] overflow-hidden sm:h-[420px]">
                 <Image
                   src={item.image}
                   alt={item.title}
                   fill
+                  sizes="
+                    (max-width: 767px) 86vw,
+                    (max-width: 1023px) 70vw,
+                    50vw
+                  "
                   className="object-cover transition duration-700 group-hover:scale-105"
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
                 <div className="absolute bottom-8 left-8">
-
                   <h3 className="font-instrument text-4xl text-white">
                     {item.title}
                   </h3>
-
                 </div>
-
               </div>
 
-              <div className="p-10">
-
+              {/* Content */}
+              <div className="p-8 md:p-10">
                 <div className="leading-none">
-
-                  <span className="font-instrument text-[68px] text-[#556B2F]">
+                  <span className="font-instrument text-[58px] text-[#556B2F] md:text-[68px]">
                     {item.days}
                   </span>
 
-                  <div className="uppercase tracking-[5px] text-sm text-[#B68A35] mt-2">
+                  <div className="mt-2 text-sm uppercase tracking-[5px] text-[#B68A35]">
                     {item.label}
                   </div>
-
                 </div>
 
-                <p className="mt-8 text-[#6B6B6B] leading-8">
+                <p className="mt-7 leading-8 text-[#6B6B6B]">
                   {item.description}
                 </p>
 
                 <Link
                   href={item.href}
-                  className="inline-flex items-center mt-10 px-7 py-4 rounded-full bg-[#556B2F] text-white font-medium transition-all duration-300 hover:bg-[#B68A35]"
+                  className="
+                    mt-8
+                    inline-flex
+                    items-center
+                    rounded-full
+                    bg-[#556B2F]
+                    px-7
+                    py-4
+                    font-medium
+                    text-white
+                    transition-all
+                    duration-300
+                    hover:bg-[#B68A35]
+
+                    md:mt-10
+                  "
                 >
                   {item.button}
                 </Link>
-
               </div>
-
             </div>
-
           ))}
-
         </div>
-
       </div>
     </section>
   );
