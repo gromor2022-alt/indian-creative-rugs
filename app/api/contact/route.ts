@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { prisma } from "@/lib/prisma";
+import { logger } from "@/lib/logger";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -94,7 +95,7 @@ console.log("Enquiry saved successfully");
     });
   } 
 catch (error) {
-  console.error(error);
+  logger.error("Contact form error", error);
   return NextResponse.json(
     {
       success: false,

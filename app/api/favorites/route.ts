@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getProducts } from "@/lib/getProducts";
+import { logger } from "@/lib/logger";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -68,7 +69,7 @@ export async function GET(req: NextRequest) {
       favorites,
     });
   } catch (error: any) {
-    console.error("GET FAVORITES ERROR:", error);
+    logger.error("GET FAVORITES ERROR", error);
 
     return noCacheResponse({
       success: false,
@@ -110,7 +111,7 @@ export async function POST(req: NextRequest) {
       favorite,
     });
   } catch (error: any) {
-    console.error("POST FAVORITES ERROR:", error);
+    logger.error("POST FAVORITES ERROR", error);
 
     return noCacheResponse({
       success: false,
@@ -145,10 +146,7 @@ export async function DELETE(req: NextRequest) {
       success: true,
     });
   } catch (error: any) {
-    console.error(
-      "DELETE FAVORITES ERROR:",
-      error
-    );
+    logger.error("DELETE FAVORITES ERROR", error);
 
     return noCacheResponse({
       success: false,

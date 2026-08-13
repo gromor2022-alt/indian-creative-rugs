@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import WooCommerce from "@/lib/woocommerce";
 import { getProductMap } from "@/lib/product-repository";
 import { transformOrder } from "@/lib/order-transformer";
+import { logger } from "@/lib/logger";
 
 export async function GET(req: NextRequest) {
   try {
@@ -46,7 +47,7 @@ export async function GET(req: NextRequest) {
       orders,
     });
   } catch (error: any) {
-    console.error(error);
+    logger.error("Fetch customer orders failed", error);
 
     return NextResponse.json({
       success: false,

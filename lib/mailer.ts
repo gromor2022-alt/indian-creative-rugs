@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { logger } from "./logger";
 
 export const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -14,7 +15,7 @@ export async function sendPasswordResetEmail(
   email: string,
   resetLink: string
 ) {
-console.log("Sending password reset email to:", email);
+  logger.debug("Sending password reset email");
   const info = await transporter.sendMail({
     from: `"Indian Creative Rugs" <${process.env.SMTP_NOREPLY_USER}>`,
     to: email,
@@ -56,6 +57,6 @@ console.log("Sending password reset email to:", email);
       </div>
     `,
   });
-console.log("Email sent:", info.messageId);
-console.log(info.response);
+  logger.debug("Email sent:", info.messageId);
+  logger.debug(info.response);
 }

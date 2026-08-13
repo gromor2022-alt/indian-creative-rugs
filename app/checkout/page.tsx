@@ -92,8 +92,6 @@ export default function CheckoutPage() {
 
       const data = await response.json();
 
-      console.log("CREATE ORDER RESPONSE:", data);
-
       if (!data.success) {
         alert(data.message || "Order creation failed");
         return;

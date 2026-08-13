@@ -1,4 +1,5 @@
 import WooCommerce from "@/lib/woocommerce";
+import { logger } from "./logger";
 
 export async function getProducts() {
   try {
@@ -25,7 +26,7 @@ collections:
   })) || [],
     }));
   } catch (error) {
-    console.error("WooCommerce Error:", error);
+    logger.error("WooCommerce Error", error);
     return [];
   }
 }

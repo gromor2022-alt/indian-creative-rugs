@@ -1,4 +1,5 @@
 import WooCommerce from "./woocommerce";
+import { logger } from "./logger";
 
 export async function getDashboardStats() {
   try {
@@ -49,7 +50,7 @@ return {
 
   } catch (error) {
 
-    console.error("Dashboard Error:", error);
+    logger.error("Dashboard Error", error);
 
     return {
       totalOrders: 0,
@@ -64,7 +65,7 @@ export async function getOrderById(id: string) {
     const response = await WooCommerce.get(`orders/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Order Fetch Error:", error);
+    logger.error("Order Fetch Error", error);
     return null;
   }
 }
@@ -77,7 +78,7 @@ export async function getAllOrders() {
 
   } catch (error) {
 
-    console.error("Orders Fetch Error:", error);
+    logger.error("Orders Fetch Error", error);
 
     return [];
 
@@ -90,7 +91,7 @@ export async function getCustomers() {
 
     return response.data;
   } catch (error) {
-    console.error("Customers Fetch Error:", error);
+    logger.error("Customers Fetch Error", error);
     return [];
   }
 }
@@ -101,7 +102,7 @@ export async function getCustomerById(id: string) {
     const response = await WooCommerce.get(`customers/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Customer Fetch Error:", error);
+    logger.error("Customer Fetch Error", error);
     return null;
   }
 }

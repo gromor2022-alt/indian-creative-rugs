@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendPasswordResetEmail } from "@/lib/mailer";
 import crypto from "crypto";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: Request) {
   try {
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
     });
 
   } catch (error) {
-    console.error(error);
+    logger.error("Forgot password error", error);
 
     return NextResponse.json(
       {

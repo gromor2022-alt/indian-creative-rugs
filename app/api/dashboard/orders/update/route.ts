@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import WooCommerce from "@/lib/woocommerce";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: NextRequest) {
   try {
@@ -60,14 +61,12 @@ export async function POST(req: NextRequest) {
 
     const response = await WooCommerce.put(`orders/${orderId}`, payload);
 
-    console.log("WooCommerce Response:", response.data);
-
     return NextResponse.json({
       success: true,
       order: response.data,
     });
   } catch (error: any) {
-    console.error(error);
+    logger.error("Order update failed", error);
 
     return NextResponse.json(
       {

@@ -78,20 +78,6 @@ export function transformOrder(
     pickupDate: getMetaValue(order.meta_data, "_icr_pickup_date"),
 
     items: (order.line_items || []).map((item: any) => {
-    console.log("========== ICR ORDER DEBUG ==========");
-console.log("ORDER ID:", order.id);
-console.log("ORDER NUMBER:", order.number);
-console.log("ORDER META:", JSON.stringify(order.meta_data, null, 2));
-
-(order.line_items || []).forEach((item: any) => {
-  console.log("PRODUCT:", item.name);
-  console.log(
-    "LINE ITEM META:",
-    JSON.stringify(item.meta_data, null, 2)
-  );
-});
-
-console.log("======================================");
       const product = productMap.get(item.product_id);
 
       return {

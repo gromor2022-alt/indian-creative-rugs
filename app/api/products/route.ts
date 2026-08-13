@@ -1,5 +1,6 @@
 import WooCommerce from "@/lib/woocommerce";
 import { NextResponse } from "next/server";
+import { logger } from "@/lib/logger";
 
 export async function GET() {
   try {
@@ -22,7 +23,7 @@ export async function GET() {
     return NextResponse.json(products);
 
   } catch (error: any) {
-    console.error(error);
+    logger.error("Fetch products failed", error);
 
     return NextResponse.json(
       {

@@ -1,5 +1,6 @@
 import WooCommerce from "@/lib/woocommerce";
 import { NextResponse } from "next/server";
+import { logger } from "@/lib/logger";
 
 const rectanglePrices: Record<string, number> = {
   "2x3": 199,
@@ -179,19 +180,9 @@ export async function POST(request: Request) {
       line_items: lineItems,
     };
 
-    console.log(
-      "CREATING WOOCOMMERCE ORDER:",
-      JSON.stringify(order, null, 2)
-    );
-
     const response = await WooCommerce.post(
       "orders",
       order
-    );
-
-    console.log(
-      "WOOCOMMERCE ORDER CREATED:",
-      JSON.stringify(response.data, null, 2)
     );
 
     const orderId = response.data.id;
@@ -200,10 +191,8 @@ export async function POST(request: Request) {
       `${process.env.NEXT_PUBLIC_WORDPRESS_URL}` +
       `/checkout/order-pay/${orderId}/?pay_for_order=true&key=${response.data.order_key}`;
 
-    console.log("ORDER ID:", orderId);
-    console.log("ORDER KEY:", response.data.order_key);
-    console.log("PAYMENT URL:", paymentUrl);
-    console.log("ORDER TOTAL:", response.data.total);
+    logger.debug("ORDER ID:", orderId);
+    logger.debug("ORDER TOTAL:", response.data.total);
 
     return NextResponse.json({
       success: true,
@@ -212,10 +201,7 @@ export async function POST(request: Request) {
       paymentUrl,
     });
   } catch (error: any) {
-    console.error(
-      "ORDER ERROR:",
-      error?.response?.data || error
-    );
+    logger.error("Order creation failed", error);
 
     return NextResponse.json(
       {

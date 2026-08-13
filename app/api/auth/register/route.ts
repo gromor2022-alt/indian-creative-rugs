@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: Request) {
   try {
@@ -41,7 +42,7 @@ export async function POST(req: Request) {
       customer: data,
     });
   } catch (err: any) {
-  console.error("REGISTER ERROR:", err);
+  logger.error("Customer registration failed", err);
 
   return NextResponse.json({
     success: false,
