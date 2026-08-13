@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import WooCommerce from "@/lib/woocommerce";
 import { logger } from "@/lib/logger";
+import { requireAdmin } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) {
+    return auth.response;
+  }
+
   try {
     const body = await req.json();
 
