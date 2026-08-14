@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getProducts } from "@/lib/getProducts";
 import { logger } from "@/lib/logger";
+import { requireCustomer } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -24,20 +25,17 @@ function noCacheResponse(
 
 export async function GET(req: NextRequest) {
   try {
-    const email = req.nextUrl.searchParams.get("email");
+    const auth = await requireCustomer(req);
 
-    if (!email) {
-      return noCacheResponse({
-        success: false,
-        message: "Email is required.",
-      });
+    if (!auth.ok) {
+      return auth.response;
     }
 
     // Always read the latest favorite records from Neon.
     const favoriteRecords =
       await prisma.favorite.findMany({
         where: {
-          email,
+          email: auth.session.email,
         },
         orderBy: {
           createdAt: "desc",
@@ -80,14 +78,18 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, productId } =
-      await req.json();
+    const auth = await requireCustomer(req);
 
-    if (!email || !productId) {
+    if (!auth.ok) {
+      return auth.response;
+    }
+
+    const { productId } = await req.json();
+
+    if (!productId) {
       return noCacheResponse({
         success: false,
-        message:
-          "Email and Product ID are required.",
+        message: "Product ID is required.",
       });
     }
 
@@ -95,13 +97,13 @@ export async function POST(req: NextRequest) {
       await prisma.favorite.upsert({
         where: {
           email_productId: {
-            email,
+            email: auth.session.email,
             productId,
           },
         },
         update: {},
         create: {
-          email,
+          email: auth.session.email,
           productId,
         },
       });
@@ -122,21 +124,25 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const { email, productId } =
-      await req.json();
+    const auth = await requireCustomer(req);
 
-    if (!email || !productId) {
+    if (!auth.ok) {
+      return auth.response;
+    }
+
+    const { productId } = await req.json();
+
+    if (!productId) {
       return noCacheResponse({
         success: false,
-        message:
-          "Email and Product ID are required.",
+        message: "Product ID is required.",
       });
     }
 
     await prisma.favorite.delete({
       where: {
         email_productId: {
-          email,
+          email: auth.session.email,
           productId,
         },
       },
