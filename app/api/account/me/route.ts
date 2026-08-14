@@ -1,22 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import WooCommerce from "@/lib/woocommerce";
+import { requireCustomer } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
   try {
-    const email = req.nextUrl.searchParams.get("email");
+    const auth = await requireCustomer(req);
 
-    if (!email) {
-      return NextResponse.json({
-        success: false,
-        message: "Email is required.",
-      });
+    if (!auth.ok) {
+      return auth.response;
     }
 
-    const response = await WooCommerce.get("customers", {
-      email,
-    });
+    const response = await WooCommerce.get(
+      `customers/${auth.session.customerId}`
+    );
 
-    const customer = response.data[0];
+    const customer = response.data;
 
     if (!customer) {
       return NextResponse.json({

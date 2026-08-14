@@ -3,36 +3,20 @@ import WooCommerce from "@/lib/woocommerce";
 import { getProductMap } from "@/lib/product-repository";
 import { transformOrder } from "@/lib/order-transformer";
 import { logger } from "@/lib/logger";
+import { requireCustomer } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
   try {
-    const email = req.nextUrl.searchParams.get("email");
+    const auth = await requireCustomer(req);
 
-    if (!email) {
-      return NextResponse.json({
-        success: false,
-        message: "Email is required.",
-      });
-    }
-
-    // Fetch customer
-    const customerResponse = await WooCommerce.get("customers", {
-      email,
-    });
-
-    const customer = customerResponse.data[0];
-
-    if (!customer) {
-      return NextResponse.json({
-        success: true,
-        orders: [],
-      });
+    if (!auth.ok) {
+      return auth.response;
     }
 
     // Fetch orders & products in parallel
     const [ordersResponse, productMap] = await Promise.all([
       WooCommerce.get("orders", {
-        customer: customer.id,
+        customer: auth.session.customerId,
         per_page: 100,
       }),
       getProductMap(),
