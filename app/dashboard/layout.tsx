@@ -41,7 +41,12 @@ export default function DashboardLayout({
           <Link href="/dashboard/customers" className="block rounded-xl px-4 py-3 hover:bg-[#3C613C] transition">
             👥 Customers
           </Link>
-
+          <Link
+  href="/dashboard/favorites"
+  className="block rounded-xl px-4 py-3 hover:bg-[#3C613C] transition"
+>
+  ❤️ Favorites
+</Link>
           <Link href="/dashboard/settings" className="block rounded-xl px-4 py-3 hover:bg-[#3C613C] transition">
             ⚙ Settings
           </Link>
