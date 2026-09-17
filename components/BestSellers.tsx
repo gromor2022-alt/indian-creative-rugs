@@ -3,6 +3,7 @@
 import FavoriteButton from "@/components/FavoriteButton";
 import Image from "next/image";
 import Link from "next/link";
+import { CylinderCarousel } from "@/components/ui/cylinder-carousel";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -45,97 +46,18 @@ export default function BestSellers({ products }: Props) {
         </p>
 
         {/* Continuous Horizontal Carousel */}
-        <Swiper
-          modules={[Autoplay]}
-          direction="horizontal"
-          loop={true}
-          autoplay={{
-            delay: 0,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: false,
-          }}
-          speed={6000}
-          allowTouchMove={false}
-          spaceBetween={16}
-          slidesPerView={2}
-          breakpoints={{
-            320: {
-              slidesPerView: 2,
-              spaceBetween: 14,
-            },
-
-            480: {
-              slidesPerView: 2,
-              spaceBetween: 16,
-            },
-
-            768: {
-              slidesPerView: 3,
-              spaceBetween: 20,
-            },
-
-            1024: {
-              slidesPerView: 4,
-              spaceBetween: 20,
-            },
-
-            1400: {
-              slidesPerView: 5,
-              spaceBetween: 20,
-            },
-          }}
-        >
-          {products.map((rug) => (
-            <SwiperSlide
-              key={rug.id}
-              className="pb-6"
-            >
-              <Link
-                href={`/rugs/${rug.slug}`}
-                className="group block"
-              >
-                <div className="relative overflow-hidden rounded-[28px] bg-[#FCF8F2] shadow-sm">
-                  <FavoriteButton productId={rug.id} />
-
-                  <Image
-                    src={
-                      rug.images?.[0]?.src ||
-                      "/placeholder.jpg"
-                    }
-                    alt={rug.name}
-                    width={500}
-                    height={700}
-                    sizes="(max-width: 767px) 50vw, (max-width: 1023px) 33vw, (max-width: 1399px) 25vw, 20vw"
-                    className="
-                      w-full
-                      h-[360px]
-                      sm:h-[400px]
-                      md:h-[460px]
-                      lg:h-[520px]
-                      object-cover
-                    "
-                  />
-                </div>
-
-                <h3
-                  className="
-                    mt-6
-                    md:mt-8
-                    text-center
-                    font-instrument
-                    text-[18px]
-                    sm:text-[21px]
-                    md:text-[24px]
-                    text-[#556B2F]
-                    tracking-[0.5px]
-                  "
-                >
-                  {rug.name}
-                </h3>
-              </Link>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        {/* 3D Cylinder Carousel */}
+<CylinderCarousel
+  images={products.map((rug) => ({
+    src: rug.images?.[0]?.src || "/placeholder.jpg",
+    alt: rug.name,
+    href: `/rugs/${rug.slug}`,
+  }))}
+  cardWidth={260}
+  animationDuration={38}
+  containerClassName="scale-[0.9] md:scale-100"
+  cardClassName="shadow-xl"
+/>
       </div>
     </section>
   );
