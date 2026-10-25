@@ -5,6 +5,10 @@ export default function StatusBar() {
       <div className="ticker flex gap-16 whitespace-nowrap">
 
         <span>
+          🖤 BLACK FRIDAY SALE, EXTRA SAVINGS! Get 25% OFF!
+        </span>
+         
+        <span>
           🚚 SHIP SHIP, HOORAY! Free Shipping on all U.S. orders!
         </span>
          <span>
