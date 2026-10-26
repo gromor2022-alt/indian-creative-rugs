@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Privacy Policy",
+  description: "How Indian Creative Rugs collects, uses and protects your personal information.",
+  url: "/privacy-policy",
+});
+
 import FAQItem from "../../components/FAQItem";
 
 export default function PrivacyPolicyPage() {

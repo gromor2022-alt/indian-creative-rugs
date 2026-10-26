@@ -107,9 +107,9 @@ export const metadata: Metadata = {
     images: ["/og-image.jpg"],
   },
 
-  alternates: {
-    canonical: "https://indiancreativerugs.com",
-  },
+  // No canonical here on purpose: every page sets its own canonical via
+  // generateSEO (lib/seo.ts). A canonical in the root layout is inherited by
+  // every page and tells Google they are all copies of the homepage.
 
   category: "Home Decor",
 };

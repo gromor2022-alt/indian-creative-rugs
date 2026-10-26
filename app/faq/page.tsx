@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Rug FAQ: Care, Custom Orders and Sizing",
+  description: "Answers about rug care, custom and personalised orders, sizing, packaging and wholesale from Indian Creative Rugs.",
+  url: "/faq",
+});
+
 import FAQItem from "../../components/FAQItem";
 
 export default function FAQPage() {

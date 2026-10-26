@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Rug Collections",
+  description: "Explore our rug collections: Persian, Heritage, Vintage, Modern and Hand-Knotted designs, handcrafted by artisans in Bhadohi, India.",
+  url: "/collections",
+});
+
 import Link from "next/link";
 import Image from "next/image";
 

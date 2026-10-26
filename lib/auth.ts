@@ -8,20 +8,38 @@ export async function createSession(user: {
   name: string;
   email: string;
 }) {
-  return await new SignJWT(user)
+  return await new SignJWT({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    scope: "admin",
+  })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
     .sign(secret);
 }
 
+/**
+ * Verifies an ADMIN session token. Customer tokens are signed with the same
+ * secret, so the scope check is what keeps a customer token from being
+ * accepted as an admin session. Tokens without scope "admin" (including
+ * admin tokens issued before this check existed) are rejected.
+ */
 export async function verifySession(token: string) {
   try {
-    const { payload } = await jwtVerify(token, secret);
-    return payload as {
-      id: number;
-      name: string;
-      email: string;
+    const { payload } = await jwtVerify(token, secret, {
+      algorithms: ["HS256"],
+    });
+
+    if (payload.scope !== "admin") {
+      return null;
+    }
+
+    return {
+      id: payload.id as number,
+      name: payload.name as string,
+      email: payload.email as string,
     };
   } catch {
     return null;
