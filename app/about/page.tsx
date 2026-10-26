@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Our Story – Handmade Rugs from Bhadohi Since 1980",
+  description: "Indian Creative Rugs has made handcrafted rugs in Bhadohi, India since 1980: hand-knotted, hand-tufted, dhurrie and custom rugs for homes and designers.",
+  url: "/about",
+});
+
 export default function AboutPage() {
   return (
     <main className="bg-[#F7EADF] min-h-screen">

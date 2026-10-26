@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Shop All Handmade Rugs",
+  description: "Browse every handmade rug from Indian Creative Rugs: hand-knotted and hand-tufted Persian, Heritage, Vintage and Modern designs, made in India.",
+  url: "/rugs",
+});
+
 import FavoriteButton from "@/components/FavoriteButton";
 import Link from "next/link";
 import Image from "next/image";

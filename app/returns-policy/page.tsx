@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Returns and Exchanges Policy",
+  description: "Cancellation, return and exchange terms for Indian Creative Rugs, including custom rugs and damaged shipments.",
+  url: "/returns-policy",
+});
+
 import FAQItem from "../../components/FAQItem";
 
 export default function ReturnsPolicyPage() {

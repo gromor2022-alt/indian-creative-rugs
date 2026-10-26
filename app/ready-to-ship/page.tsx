@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Ready to Ship and Quick Ship Delivery Options",
+  description: "Choose ready-to-ship rugs dispatched in 1–3 days or made-to-order rugs delivered in 28–35 days, handcrafted in India.",
+  url: "/ready-to-ship",
+});
+
 import Image from "next/image";
 
 export default function ReadyToShipPage() {

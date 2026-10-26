@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Shipping Policy",
+  description: "How Indian Creative Rugs ships worldwide from India: courier partners, processing times, tracking and customs.",
+  url: "/shipping-policy",
+});
+
 export default function ShippingPolicyPage() {
   return (
     <main className="bg-[#F4F0E8] min-h-screen">

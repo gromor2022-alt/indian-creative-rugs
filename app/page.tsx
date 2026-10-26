@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Indian Creative Rugs | Handmade Luxury Rugs from India",
+  absoluteTitle: true,
+  description: "Hand-knotted and hand-tufted rugs made in Bhadohi, India since 1980. Persian, Heritage, Vintage and Modern designs, custom sizes and worldwide delivery.",
+  url: "/",
+});
+
 import Hero from "../components/Hero";
 import CollectionsGrid from "@/components/CollectionsGrid";
 import BestSellers from "../components/BestSellers";

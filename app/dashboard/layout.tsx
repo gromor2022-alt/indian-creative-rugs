@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Dashboard",
+  description: "Indian Creative Rugs admin dashboard.",
+  url: "/dashboard",
+  noindex: true,
+});
+
 import Link from "next/link";
 
 export default function DashboardLayout({

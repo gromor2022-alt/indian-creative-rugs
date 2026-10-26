@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+import { generateSEO } from "@/lib/seo";
+
+export const metadata: Metadata = generateSEO({
+  title: "Trade Program for Designers and Architects",
+  description: "Trade program for interior designers, architects, hospitality groups and procurement teams: preferred pricing and dedicated support for handmade rugs.",
+  url: "/trade-program",
+});
+
 export default function TradeProgramPage() {
   return (
     <main className="bg-[#F4F0E8] min-h-screen">
