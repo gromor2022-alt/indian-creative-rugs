@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import "@geoapify/geocoder-autocomplete/styles/minimal.css";
 
 interface Props {
+  /** Called when the customer picks a suggested address. */
   onSelect: (address: {
     address: string;
     city: string;
@@ -11,15 +12,31 @@ interface Props {
     zipCode: string;
     country: string;
   }) => void;
+  /** Called on every keystroke, so a typed address is kept even if no suggestion is picked. */
+  onInputChange?: (text: string) => void;
 }
 
-export default function AddressAutocomplete({ onSelect }: Props) {
+export default function AddressAutocomplete({ onSelect, onInputChange }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-const initialized = useRef(false);
+  const initialized = useRef(false);
+
+  // The Geoapify widget is created once, so its event listeners must not
+  // capture the callbacks from the first render (that froze an empty copy of
+  // the form and wiped fields typed before the address). Always call the
+  // latest callbacks through refs instead.
+  const onSelectRef = useRef(onSelect);
+  const onInputChangeRef = useRef(onInputChange);
 
   useEffect(() => {
-if (initialized.current) return;
-initialized.current = true;
+    onSelectRef.current = onSelect;
+    onInputChangeRef.current = onInputChange;
+  }, [onSelect, onInputChange]);
+
+  useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let autocomplete: any;
 
     async function init() {
@@ -35,11 +52,20 @@ initialized.current = true;
         }
       );
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       autocomplete.on("select", (location: any) => {
-        const p = location.properties;
+        const p = location?.properties;
+        if (!p) return;
 
-        onSelect({
-          address: p.address_line1 || "",
+        // For named places (e.g. "Empire State Building") address_line1 is
+        // the place name, not the street. Build the street address from its
+        // parts so couriers get "350 5th Avenue".
+        const street = [p.housenumber, p.street]
+          .filter(Boolean)
+          .join(" ");
+
+        onSelectRef.current({
+          address: street || p.address_line1 || "",
           city: p.city || "",
           state: p.state || "",
           zipCode: p.postcode || "",
@@ -47,6 +73,10 @@ initialized.current = true;
             ? p.country_code.toUpperCase()
             : "",
         });
+      });
+
+      autocomplete.on("input", (text: string) => {
+        onInputChangeRef.current?.(text ?? "");
       });
     }
 
@@ -57,7 +87,7 @@ initialized.current = true;
         autocomplete.destroy();
       }
     };
-  }, [onSelect]);
+  }, []);
 
   return <div ref={containerRef} />;
 }

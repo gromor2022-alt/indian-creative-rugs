@@ -1,6 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
+import {
+  SHAPES,
+  activeSalePercent,
+  formatUSD,
+  getRegularPrice,
+  getSalePrice,
+  sizesForShape,
+} from "@/lib/pricing";
 
 type ProductOptionsProps = {
   shape: string;
@@ -19,74 +27,51 @@ export default function ProductOptions({
   price,
   setPrice,
 }: ProductOptionsProps) {
-  const rectanglePrices: Record<string, number> = {
-    "2x3": 199,
-    "3x5": 399,
-    "4x6": 499,
-    "5x7": 599,
-    "5x8": 799,
-    "6x9": 899,
-    "8x10": 1249,
-    "8x11": 1349,
-    "9x12": 1699,
-    "10x13": 1799,
-    "10x14": 1899,
-    "12x15": 2499,
-    "12x18": 2999,
-  };
+  const sizes = sizesForShape(shape);
+  const salePercent = activeSalePercent();
+  const regularPrice = getRegularPrice(shape, size);
 
-  const squarePrices: Record<string, number> = {
-    "5x5": 499,
-    "6x6": 699,
-    "7x7": 849,
-    "8x8": 999,
-    "9x9": 1199,
-    "10x10": 1499,
-    "11x11": 1699,
-    "12x12": 1999,
-  };
-
-  const runnerPrices: Record<string, number> = {
-    "2.5x6": 399,
-    "2.5x7": 449,
-    "2.5x8": 499,
-    "2.5x9": 549,
-    "2.5x10": 599,
-    "2.5x11": 649,
-    "2.5x12": 699,
-  };
-
-  const sizes =
-    shape === "Rectangle"
-      ? Object.keys(rectanglePrices)
-      : shape === "Runner"
-      ? Object.keys(runnerPrices)
-      : Object.keys(squarePrices);
-
+  // Reset to the first size when the shape changes.
   useEffect(() => {
-    if (sizes.length > 0) {
+    if (sizes.length > 0 && !sizes.includes(size)) {
       setSize(sizes[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shape]);
 
+  // Keep the price in sync with the selected shape and size.
   useEffect(() => {
-    if (!size) return;
-
-    if (shape === "Rectangle") {
-      setPrice(rectanglePrices[size]);
-    } else if (shape === "Runner") {
-      setPrice(runnerPrices[size]);
-    } else {
-      setPrice(squarePrices[size]);
+    const next = getSalePrice(shape, size);
+    if (next !== null) {
+      setPrice(next);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shape, size]);
 
   return (
     <div className="mb-8">
 
-      <p className="text-[30px] font-medium text-[#22304A] mb-6">
-        ${price}
-      </p>
+      <div className="mb-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <p className="text-[30px] font-medium text-[#22304A]">
+          {salePercent > 0 && (
+            <span className="sr-only">Sale price: </span>
+          )}
+          {formatUSD(price)}
+        </p>
+
+        {salePercent > 0 && regularPrice !== null && regularPrice > price && (
+          <>
+            <p className="text-[20px] text-gray-500 line-through">
+              <span className="sr-only">Regular price: </span>
+              {formatUSD(regularPrice)}
+            </p>
+
+            <span className="rounded-full bg-[#B68A35] px-3 py-1 text-[12px] font-semibold uppercase tracking-[1px] text-white">
+              {salePercent}% off
+            </span>
+          </>
+        )}
+      </div>
 
       <h3 className="text-[14px] uppercase tracking-[2px] text-[#5D5A3D] mb-3">
         Shape
@@ -94,11 +79,12 @@ export default function ProductOptions({
 
       <div className="flex flex-wrap gap-2 mb-6">
 
-        {["Rectangle", "Square", "Runner"].map((item) => (
+        {SHAPES.map((item) => (
           <button
             key={item}
             type="button"
             onClick={() => setShape(item)}
+            aria-pressed={shape === item}
             className={`px-4 py-2 text-sm border transition ${
               shape === item
                 ? "bg-[#22304A] text-white border-[#22304A]"
@@ -118,6 +104,7 @@ export default function ProductOptions({
       <select
         value={size}
         onChange={(e) => setSize(e.target.value)}
+        aria-label="Size"
         className="
           border
           border-[#D9D1C7]

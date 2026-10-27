@@ -4,6 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductOptions from "@/components/ProductOptions";
 import { useCart } from "@/context/CartContext";
+import {
+  DEFAULT_SHAPE,
+  DEFAULT_SIZE,
+  getSalePrice,
+} from "@/lib/pricing";
 
 export default function ProductDetails({
 product,
@@ -13,10 +18,12 @@ product: any;
 const { addToCart } = useCart();
 const router = useRouter();
 
-const [shape, setShape] = useState("Rectangle");
-const [size, setSize] = useState("2x3");
+const [shape, setShape] = useState(DEFAULT_SHAPE);
+const [size, setSize] = useState(DEFAULT_SIZE);
+// Start from the shared price table (not the WooCommerce price, which is
+// empty for some products and would render $0 before hydration).
 const [price, setPrice] = useState(
-  Number(product.price) || 0
+  getSalePrice(DEFAULT_SHAPE, DEFAULT_SIZE) ?? 0
 );
 const [quantity, setQuantity] = useState(1);
 

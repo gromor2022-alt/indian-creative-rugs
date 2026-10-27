@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { activeSalePercent, cartSavings } from "@/lib/pricing";
 
 export default function CartContent() {
   const {
@@ -17,6 +18,7 @@ export default function CartContent() {
   );
 
   const total = subtotal;
+  const savings = cartSavings(cart);
 
   return (
     <section className="max-w-[1500px] mx-auto px-6 py-16">
@@ -216,6 +218,13 @@ export default function CartContent() {
                 <span>Subtotal</span>
                 <span>${subtotal.toFixed(2)}</span>
               </div>
+
+              {savings > 0 && (
+                <div className="flex justify-between font-medium text-[#B68A35]">
+                  <span>{activeSalePercent()}% off sale (included)</span>
+                  <span>You save ${savings.toFixed(2)}</span>
+                </div>
+              )}
             </div>
 
             <div className="border-t border-[#ECE5DA] mt-6 pt-6">

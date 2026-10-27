@@ -7,6 +7,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
+import { getSalePrice } from "@/lib/pricing";
 
 export type CartItem = {
   id: string;
@@ -17,6 +18,12 @@ export type CartItem = {
   price: number;
   quantity: number;
 };
+
+/** Sets the item's unit price from the shared price table and current sale. */
+function withCurrentPrice(item: CartItem): CartItem {
+  const price = getSalePrice(item.shape, item.size);
+  return price === null ? item : { ...item, price };
+}
 
 type CartContextType = {
   cart: CartItem[];
@@ -45,10 +52,18 @@ export function CartProvider({
 }) {
   const [cart, setCart] = useState<CartItem[]>([]);
 useEffect(() => {
-  const savedCart = localStorage.getItem("icr-cart");
+  try {
+    const savedCart = localStorage.getItem("icr-cart");
 
-  if (savedCart) {
-    setCart(JSON.parse(savedCart));
+    if (savedCart) {
+      // Re-price saved items so carts filled before a sale started (or
+      // ended) show the current price, which is what checkout charges.
+      setCart(
+        (JSON.parse(savedCart) as CartItem[]).map(withCurrentPrice)
+      );
+    }
+  } catch {
+    // Ignore unreadable or blocked storage; start with an empty cart.
   }
 }, []);
 
@@ -59,7 +74,9 @@ useEffect(() => {
   );
 }, [cart]);
 
-  const addToCart = (item: CartItem) => {
+  const addToCart = (newItem: CartItem) => {
+    const item = withCurrentPrice(newItem);
+
     setCart((prev) => {
       const existing = prev.find(
         (p) =>
