@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import PriceFrom from "@/components/PriceFrom";
 
 interface FavoriteProduct {
   id: number;
@@ -130,9 +131,7 @@ async function removeFavorite(productId: number) {
             {rug.name}
           </h2>
 
-          <p className="text-2xl font-semibold text-[#22304A] mt-4">
-            ${rug.price}
-          </p>
+          <PriceFrom className="text-2xl font-semibold text-[#22304A] mt-4" />
 
           <div className="mt-6 flex items-center justify-between">
 

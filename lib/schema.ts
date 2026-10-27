@@ -1,3 +1,11 @@
+import {
+  DEFAULT_SHAPE,
+  DEFAULT_SIZE,
+  SALE,
+  activeSalePercent,
+  getSalePrice,
+} from "@/lib/pricing";
+
 const SITE_URL = "https://indiancreativerugs.com";
 
 export function organizationSchema() {
@@ -65,9 +73,18 @@ export function productSchema(product: any) {
     offers: {
       "@type": "Offer",
 
-      price: product.price,
+      // Same price the page shows for the default size (lib/pricing.ts),
+      // including any active sale. Not the WooCommerce price, which is
+      // empty for some products.
+      price: (
+        getSalePrice(DEFAULT_SHAPE, DEFAULT_SIZE) ?? 0
+      ).toFixed(2),
 
       priceCurrency: "USD",
+
+      ...(SALE.endsAt && activeSalePercent() > 0
+        ? { priceValidUntil: SALE.endsAt.slice(0, 10) }
+        : {}),
 
       availability:
         product.stock_quantity > 0

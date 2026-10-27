@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useCart } from "@/context/CartContext";
+import { activeSalePercent, cartSavings } from "@/lib/pricing";
 import Image from "next/image";
 import AddressAutocomplete from "@/components/AddressAutocomplete";
 import Select from "react-select";
@@ -17,7 +18,8 @@ export default function CheckoutPage() {
     lastName: "",
     email: "",
     phone: "",
-    country: "IN",
+    // The store sells to US customers only.
+    country: "US",
     address: "",
     city: "",
     state: "",
@@ -30,6 +32,7 @@ export default function CheckoutPage() {
   );
 
   const total = subtotal;
+  const savings = cartSavings(cart);
 
   const countryOptions = useMemo(
     () => countryList().getData(),
@@ -39,10 +42,11 @@ export default function CheckoutPage() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handlePlaceOrder = async () => {
@@ -51,17 +55,23 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.address ||
-      !formData.city ||
-      !formData.state ||
-      !formData.zipCode
-    ) {
-      alert("Please fill all required fields");
+    const required: [keyof typeof formData, string][] = [
+      ["firstName", "First Name"],
+      ["lastName", "Last Name"],
+      ["email", "Email Address"],
+      ["phone", "Phone Number"],
+      ["address", "Address"],
+      ["city", "City"],
+      ["state", "State"],
+      ["zipCode", "ZIP Code"],
+    ];
+
+    const missing = required
+      .filter(([key]) => !String(formData[key] ?? "").trim())
+      .map(([, label]) => label);
+
+    if (missing.length > 0) {
+      alert(`Please fill in: ${missing.join(", ")}`);
       return;
     }
 
@@ -240,10 +250,10 @@ export default function CheckoutPage() {
                     option.value === formData.country
                 )}
                 onChange={(selected) =>
-                  setFormData({
-                    ...formData,
+                  setFormData((prev) => ({
+                    ...prev,
                     country: selected?.value || "",
-                  })
+                  }))
                 }
                 placeholder="Select Country"
                 classNamePrefix="react-select"
@@ -296,14 +306,19 @@ export default function CheckoutPage() {
 
                 <AddressAutocomplete
                   onSelect={(address) =>
-                    setFormData({
-                      ...formData,
+                    setFormData((prev) => ({
+                      ...prev,
                       address: address.address,
-                      city: address.city,
-                      state: address.state,
-                      zipCode: address.zipCode,
-                      country: address.country,
-                    })
+                      // Keep what the customer typed if the suggestion
+                      // has no value for a field.
+                      city: address.city || prev.city,
+                      state: address.state || prev.state,
+                      zipCode: address.zipCode || prev.zipCode,
+                      country: address.country || prev.country,
+                    }))
+                  }
+                  onInputChange={(text) =>
+                    setFormData((prev) => ({ ...prev, address: text }))
                   }
                 />
               </div>
@@ -389,6 +404,13 @@ export default function CheckoutPage() {
               </div>
 
               <div className="mt-8 border-t pt-4">
+
+                {savings > 0 && (
+                  <div className="mb-3 flex justify-between font-medium text-[#B68A35]">
+                    <span>{activeSalePercent()}% off sale (included)</span>
+                    <span>You save ${savings.toFixed(2)}</span>
+                  </div>
+                )}
 
                 <div className="flex justify-between text-xl font-semibold">
                   <span>Total</span>

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getProducts } from "@/lib/getProducts";
 import { generateSEO } from "@/lib/seo";
+import PriceFrom from "@/components/PriceFrom";
 import { notFound } from "next/navigation";
 
 // SEO copy per WooCommerce category slug. Kept static so metadata does not
@@ -120,9 +121,7 @@ const collectionProducts = allProducts.filter(
                 {product.name}
               </h2>
 
-              <p className="text-[#22304A] mt-2">
-                {product.price}
-              </p>
+              <PriceFrom className="text-[#22304A] mt-2" />
             </Link>
           ))}
 

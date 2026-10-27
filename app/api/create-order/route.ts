@@ -1,66 +1,18 @@
 import WooCommerce from "@/lib/woocommerce";
 import { NextResponse } from "next/server";
 import { logger } from "@/lib/logger";
-
-const rectanglePrices: Record<string, number> = {
-  "2x3": 199,
-  "3x5": 399,
-  "4x6": 499,
-  "5x7": 599,
-  "5x8": 799,
-  "6x9": 899,
-  "8x10": 1249,
-  "8x11": 1349,
-  "9x12": 1699,
-  "10x13": 1799,
-  "10x14": 1899,
-  "12x15": 2499,
-  "12x18": 2999,
-};
-
-const squarePrices: Record<string, number> = {
-  "5x5": 499,
-  "6x6": 699,
-  "7x7": 849,
-  "8x8": 999,
-  "9x9": 1199,
-  "10x10": 1499,
-  "11x11": 1699,
-  "12x12": 1999,
-};
-
-const runnerPrices: Record<string, number> = {
-  "2.5x6": 399,
-  "2.5x7": 449,
-  "2.5x8": 499,
-  "2.5x9": 549,
-  "2.5x10": 599,
-  "2.5x11": 649,
-  "2.5x12": 699,
-};
-
-function getValidPrice(
-  shape: string,
-  size: string
-): number | null {
-  if (shape === "Rectangle") {
-    return rectanglePrices[size] ?? null;
-  }
-
-  if (shape === "Square") {
-    return squarePrices[size] ?? null;
-  }
-
-  if (shape === "Runner") {
-    return runnerPrices[size] ?? null;
-  }
-
-  return null;
-}
+import {
+  activeSalePercent,
+  getRegularPrice,
+  getSalePrice,
+} from "@/lib/pricing";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+
+    // Read the sale once so every line in this order uses the same percent.
+    const salePercent = activeSalePercent();
 
     if (!body.email) {
       return NextResponse.json(
@@ -105,15 +57,17 @@ export async function POST(request: Request) {
        * Price is calculated again on the server.
        * We do NOT trust the browser price.
        */
-      const unitPrice = getValidPrice(shape, size);
+      const regularPrice = getRegularPrice(shape, size);
+      const unitPrice = getSalePrice(shape, size);
 
-      if (unitPrice === null) {
+      if (unitPrice === null || regularPrice === null) {
         throw new Error(
           `Invalid size/shape combination: ${shape} / ${size}`
         );
       }
 
-      const lineTotal = unitPrice * quantity;
+      // Work in cents so totals like 149.25 × 3 stay exact.
+      const lineTotal = (Math.round(unitPrice * 100) * quantity) / 100;
 
       return {
         product_id: productId,
@@ -141,6 +95,18 @@ export async function POST(request: Request) {
             key: "Custom Unit Price",
             value: unitPrice.toFixed(2),
           },
+          ...(salePercent > 0
+            ? [
+                {
+                  key: "Regular Unit Price",
+                  value: regularPrice.toFixed(2),
+                },
+                {
+                  key: "Sale",
+                  value: `${salePercent}% off`,
+                },
+              ]
+            : []),
         ],
       };
     });
