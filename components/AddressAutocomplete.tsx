@@ -57,8 +57,15 @@ export default function AddressAutocomplete({ onSelect, onInputChange }: Props) 
         const p = location?.properties;
         if (!p) return;
 
+        // For named places (e.g. "Empire State Building") address_line1 is
+        // the place name, not the street. Build the street address from its
+        // parts so couriers get "350 5th Avenue".
+        const street = [p.housenumber, p.street]
+          .filter(Boolean)
+          .join(" ");
+
         onSelectRef.current({
-          address: p.address_line1 || "",
+          address: street || p.address_line1 || "",
           city: p.city || "",
           state: p.state || "",
           zipCode: p.postcode || "",
