@@ -22,14 +22,18 @@ export default function FestiveSalePopup() {
   }, []);
 
   useEffect(() => {
+    let dismissed = false;
+
     try {
-      if (window.sessionStorage.getItem(DISMISS_KEY) !== "1") {
-        const timer = window.setTimeout(() => setIsOpen(true), 900);
-        return () => window.clearTimeout(timer);
-      }
+      dismissed = window.sessionStorage.getItem(DISMISS_KEY) === "1";
     } catch {
-      setIsOpen(true);
+      // If storage is blocked, show the popup for this visit anyway.
     }
+
+    if (dismissed) return;
+
+    const timer = window.setTimeout(() => setIsOpen(true), 900);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
