@@ -108,7 +108,7 @@ export default function FestiveSalePopup() {
 
         <div className="relative min-h-[230px] overflow-hidden sm:min-h-[300px] md:min-h-full">
           <Image
-            src="/images/campaigns/black-friday-living-room.png"
+            src="/images/campaigns/black-friday-living-room.HEIC"
             alt="Handcrafted rug styled in an elegant living room"
             fill
             priority
