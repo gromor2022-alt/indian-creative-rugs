@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { X, ArrowRight, Sparkles } from "lucide-react";
@@ -9,6 +9,17 @@ const DISMISS_KEY = "icr-sale-popup-dismissed";
 
 export default function FestiveSalePopup() {
   const [isOpen, setIsOpen] = useState(false);
+  const dialogRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  const closePopup = useCallback(() => {
+    setIsOpen(false);
+    try {
+      window.sessionStorage.setItem(DISMISS_KEY, "1");
+    } catch {
+      // Closing still works if browser storage is unavailable.
+    }
+  }, []);
 
   useEffect(() => {
     try {
@@ -24,28 +35,44 @@ export default function FestiveSalePopup() {
   useEffect(() => {
     if (!isOpen) return;
 
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closePopup();
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closePopup();
+        return;
+      }
+
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
     document.addEventListener("keydown", onKeyDown);
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
+      previouslyFocused?.focus();
     };
-  }, [isOpen]);
-
-  function closePopup() {
-    setIsOpen(false);
-    try {
-      window.sessionStorage.setItem(DISMISS_KEY, "1");
-    } catch {
-      // Closing still works if browser storage is unavailable.
-    }
-  }
+  }, [isOpen, closePopup]);
 
   if (!isOpen) return null;
 
@@ -58,12 +85,15 @@ export default function FestiveSalePopup() {
       }}
     >
       <section
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="icr-sale-title"
+        aria-describedby="icr-sale-description"
         className="relative my-auto grid w-full max-w-6xl overflow-hidden rounded-2xl border border-[#d7c3a3] bg-[#fbf5eb] shadow-2xl md:min-h-[560px] md:grid-cols-[1.05fr_0.95fr]"
       >
         <button
+          ref={closeButtonRef}
           type="button"
           onClick={closePopup}
           aria-label="Close sale popup"
@@ -95,7 +125,7 @@ export default function FestiveSalePopup() {
             </div>
             <div className="mb-5 flex items-center gap-2 text-[#a87935]">
               <span className="h-px w-8 bg-current" />
-              <Sparkles size={15} />
+              <Sparkles size={15} aria-hidden="true" />
               <span className="h-px w-8 bg-current" />
             </div>
 
@@ -113,7 +143,10 @@ export default function FestiveSalePopup() {
               All Rugs
               <span className="h-px w-7 bg-[#a87935]" />
             </div>
-            <p className="mb-6 max-w-sm text-sm leading-6 text-[#6a5747] sm:text-base">
+            <p
+              id="icr-sale-description"
+              className="mb-6 max-w-sm text-sm leading-6 text-[#6a5747] sm:text-base"
+            >
               Bring home something extraordinary. Discover handcrafted rugs
               made to make your space feel beautifully yours.
             </p>
@@ -132,7 +165,7 @@ export default function FestiveSalePopup() {
               className="group inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-[#8e2018] px-7 py-4 text-sm font-semibold uppercase tracking-[0.13em] text-white shadow-lg transition hover:bg-[#681710] focus:outline-none focus:ring-2 focus:ring-[#a87935] focus:ring-offset-2 sm:text-base"
             >
               Shop All Rugs
-              <ArrowRight size={19} className="transition-transform group-hover:translate-x-1" />
+              <ArrowRight size={19} aria-hidden="true" className="transition-transform group-hover:translate-x-1" />
             </Link>
             <p className="mt-4 text-[10px] tracking-wide text-[#8a7767]">
               A little luxury for every room.
