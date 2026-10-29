@@ -8,6 +8,7 @@ export default function Hero() {
           src="/images/collections/hero.jpg"
           alt="Shop All Indian Creative Rugs"
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           priority
           className="icr-hero-media object-cover object-center transition-transform duration-700 group-hover:scale-105"
         />
