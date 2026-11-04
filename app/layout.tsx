@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 import { organizationSchema } from "@/lib/schema";
 import LenisProvider from "@/components/LenisProvider";
+import { googleTagInit, googleTagSrc } from "@/lib/analytics";
 
 const sen = Sen({
   subsets: ["latin"],
@@ -125,6 +126,14 @@ const organization = organizationSchema();
       lang="en"
       className={`${sen.variable} ${instrumentSerif.variable}`}
     >
+      <head>
+        {/* Google tag (gtag.js): once per page, high in <head>. */}
+        <script async src={googleTagSrc} />
+        <script
+          id="google-tag-init"
+          dangerouslySetInnerHTML={{ __html: googleTagInit }}
+        />
+      </head>
       <body className={sen.className}>
 <script
   type="application/ld+json"
